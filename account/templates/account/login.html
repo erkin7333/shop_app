@@ -7,7 +7,7 @@
             <div class="card border-success" style="width: 25rem;">
                 <div class="card-header bi-arrow-down-circle"> Tizimga kirish</div>
                 <div class="card-body">
-                    <form action="#" method="post">
+                    <form method="post">
                         {% csrf_token %}
                         {{ form|crispy }}
                         <button type="submit" class="btn btn-outline-success">Saqlash</button>

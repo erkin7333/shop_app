@@ -4,6 +4,7 @@ from .forms import RegisterForm, Login_User, ProfileForm, ProfileImage
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import make_password
 User = get_user_model()
 
 
@@ -29,7 +30,7 @@ class UserRegister(View):
             data = form.cleaned_data
             del data['confirm']
             user = User(**data)
-            user.set_password(data['password'])
+            user.password = make_password(data['password'])
             user.save()
             return redirect('account:login')
         return render(request, 'account/register.html', {"form": form})
@@ -37,7 +38,7 @@ class UserRegister(View):
 
 def user_login(request):
     form = Login_User()
-    if request.POST:
+    if request.method == 'POST':
         form = Login_User(data=request.POST)
         if form.is_valid():
             user = authenticate(username=form.cleaned_data['username'],
@@ -56,9 +57,15 @@ def user_logout(request):
 
 
 def profile(request):
-    # if request.method == 'POST':
     prof = User.objects.get(id=request.user.id)
     form_u = ProfileForm(instance=prof)
+    if request.method == 'POST':
+        form_u = ProfileForm(request.POST, request.FILES, instance=prof)
+        if form_u.is_valid():
+            # request.POST['password'] = make_password(request.POST['password'])
+            form_u.save()
+            # done.password = make_password(request.POST.get('password'))
+            return redirect("account:profil")
     context = {
         'form_u': form_u,
     }

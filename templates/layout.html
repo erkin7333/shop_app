@@ -1,5 +1,4 @@
 <!doctype html>
-{#{% load bootstrap4 %}#}
 {% load static %}
 <html lang="uz">
 <head>
@@ -7,20 +6,47 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="stylesheet" href="{% static "account/bootstrap/css/bootstrap.css" %}" />
-    <link rel="stylesheet" href="{% static 'account/bootstrap-icon/bootstrap-icons.css' %}" />
-    <link rel="stylesheet" href="{% static "main/style.css" %}" />
-
-
+    <title>SHOP</title>
+    <link rel='shortcut icon' type='image/jpg' href='{% static 'icons/ww.jpg' %}'/>
+    <link rel="stylesheet" href="{% static "account/bootstrap/css/bootstrap.css" %}"/>
+    <link rel="stylesheet" href="{% static 'account/bootstrap-icon/bootstrap-icons.css' %}"/>
+    <link rel="stylesheet" href="{% static "main/style.css" %}"/>
 </head>
 <body>
-        <h1 class="bg-primary text-center">Hello</h1>
+{% block content %}
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand text-light" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                {% csrf_token %}
+                {% if user.is_authenticated %}
+                    <li class="nav-item active">
+                        <a class="nav-link text-light" href="{% url 'account:profil' %}"><strong>{{ request.user }}</strong></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link text-light" href="{% url 'account:logout' %}">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item active">
+                        <a class="nav-link text-light" href="{% url 'account:register' %}">Registr</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link text-light" href="{% url 'account:login' %}">Login</a>
+                    </li>
+                {% endif %}
+            </ul>
 
-        <script src="{% static "account/jquery-3.6.0.min.js" %}"></script>
-        <script src="{% static 'account/bootstrap/js/bootstrap.bundle.js' %}"></script>
-        <script src="{% static 'main/java.js' %}"></script>
+        </div>
+    </nav>
+{% endblock %}
+<script src="{% static "account/jquery-3.6.0.min.js" %}"></script>
+<script src="{% static 'account/bootstrap/js/bootstrap.bundle.js' %}"></script>
+<script src="{% static 'main/java.js' %}"></script>
 
 </body>
 </html>

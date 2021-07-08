@@ -1,3 +1,7 @@
-body{
-    background: red;
+body {
+    background: rgb(11, 175, 116);
+}
+
+.navbar {
+    background: #710000;
 }

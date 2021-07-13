@@ -1,7 +1,11 @@
 body {
-    background: rgb(11, 175, 116);
+	background: #058429;
+	font-size: 17px;
+	font-weight: 300;
+	overflow-x: hidden;
 }
 
 .navbar {
     background: #710000;
 }
+

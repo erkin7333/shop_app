@@ -1,0 +1,55 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="mt-4">
+            <div class="row border">
+                <div class="col-lg-6">
+                    <img src="{{ product.image.url }}" alt="...">
+                </div>
+                <div class="col-lg-2">
+                    <div class="mr-auto">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-title">{{ product.category }}</p>
+                        <p class="card-text">{{ product.description }}</p>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <p>Price:</p>
+                        </div>
+                        <div class="col-lg-6">
+                            <p>$ {{ product.price }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <p>Sotuvda:</p>
+                        </div>
+                        <div class="col-lg-6">
+                            <p>{% if product.countInstok <= 0 %}Yoq{% else %}Bor{% endif %}</p>
+                        </div>
+                    </div>
+                    <div class="pt-5 mt-5">
+{#                        <form action="{% url 'shop_product:add_cart' %}" method="post" enctype="multipart/form-data">#}
+{#                            {% csrf_token %}#}
+{#                            <input type="hidden" name="image" value="{{ product.image }}">#}
+{#                            <input type="hidden" name="name" value="{{ product.name }}">#}
+{#                            <input type="hidden" name="brand" value="{{ product.brand }}">#}
+{#                            <input type="hidden" name="category" value="{{ product.category }}">#}
+{#                            <input type="hidden" name="price" value="{{ product.price }}">#}
+{#                            <button type="submit" class="btn btn-block btn-dark {% if product.countInstok <= 0 %}disabled{% endif %}">Add#}
+{#                            To Card</button>#}
+{#                        </form>#}
+                        <a href="{% url 'shop_product:add_cart' product.id %}" class="btn btn-block btn-dark {% if product.countInstok <= 0 %}disabled{% endif %}">
+                        Add To Cart
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

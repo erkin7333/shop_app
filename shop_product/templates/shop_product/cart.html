@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container mt-4">
+        <table class="table table-bordered table-hover table-striped">
+            <tbody>
+            {% for car in carts %}
+                <div class="row border">
+                    <div class="col-lg-6">
+                        <img src="{{ car.product.image.url }}" class="img-fluid" style="width: 300px;" alt="...">
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="row">
+                            <div class="col-lg-5">
+                                <p>{{ car.product.name }}</p>
+                            </div>
+                            <div class="col-lg-6">
+                                <p>{{ car.product.category }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <p>{{ car.product.brand }}</p>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="row">
+
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <p>{{ car.product.price }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

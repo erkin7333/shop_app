@@ -8,4 +8,5 @@ urlpatterns = [
     path('page_product/<int:id>/', ProView.as_view(), name='page_product'),
     path('cart/', cart, name='cart'),
     path('add_cart/<int:id>/', add_cart, name='add_cart'),
+    path('delete/<int:pk>/', cart_delete, name='delete'),
 ]

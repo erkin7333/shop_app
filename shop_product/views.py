@@ -42,3 +42,7 @@ def add_cart(request, id):
     return redirect('shop_product:cart')
 
 
+def cart_delete(request, pk):
+    obj = Cart.objects.get(pk=pk)
+    obj.delete()
+    return redirect('shop_product:cart')

@@ -17,7 +17,7 @@
 <body>
 <nav class="navbar navbar-expand-lg">
     <div class="container">
-        <a class="navbar-brand text-light" href="#">Navbar{% if request.user.is_staff %}
+        <a class="navbar-brand text-light" href="{% url 'shop_product:pro' %}">Navbar{% if request.user.is_staff %}
             <a class="btn btn-danger" href="/admin/account/user/add/">USER QO"SHISH</a>{% endif %}</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,12 +28,15 @@
             <ul class="navbar-nav ml-auto">
                 {% csrf_token %}
                 {% if user.is_authenticated %}
-                    <li class="nav-item active">
+                    <li class="nav-item active mt-1">
                         <a class="nav-link text-light"
                            href="{% url 'account:profil' %}"><strong>{{ request.user }}</strong></a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item active mt-1">
                         <a class="nav-link text-light" href="{% url 'account:logout' %}">Logout</a>
+                    </li>
+                     <li class="nav-item mr-2">
+                        <a href="{% url 'shop_product:cart' %}"><i class="bi bi-cart4 text-light fa-2x"></i></a>
                     </li>
                 {% else %}
                     <li class="nav-item active">

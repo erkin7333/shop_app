@@ -1,5 +1,6 @@
 <!doctype html>
 {% load static %}
+{% load cart_tags %}
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
@@ -36,7 +37,7 @@
                         <a class="nav-link text-light" href="{% url 'account:logout' %}">Logout</a>
                     </li>
                      <li class="nav-item mr-2">
-                        <a href="{% url 'shop_product:cart' %}"><i class="bi bi-cart4 text-light fa-2x"></i></a>
+                        <a href="{% url 'shop_product:cart' %}"><i class="bi bi-cart4 text-light fa-2x">{{ request.user|count_cart }}</i></a>
                     </li>
                 {% else %}
                     <li class="nav-item active">

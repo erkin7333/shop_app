@@ -1,13 +1,13 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <div class="container mt-4">
+{#    <div class="container mt-4">#}
         <table class="table table-bordered table-hover table-striped">
             <tbody>
             {% for car in carts %}
-                <div class="row border mt-4">
+                <div class="row border mt-4 ml-5" style="width: 50rem;">
                     <div class="col-lg-3">
-                        <img src="{{ car.product.image.url }}" class="img-fluid" style="width: 300px;" alt="...">
+                        <img src="{{ car.product.image.url }}" class="img-fluid img-thumbnail" style="width: 300px;" alt="...">
                     </div>
                     <div class="col-lg-2">
                         <p>{{ car.product.name }}</p>
@@ -18,12 +18,10 @@
                     <div class="col-lg-2">
                         <p>{{ car.product.brand }}</p>
                     </div>
-
+                    <h4 class="text-capitalize"><strong>Jami summa: {{ cart_sum }}:sum</strong></h4>
                     <div class="col-lg-2">
                         <p>{{ car.product.price }}</p>
-                    </div>
-                    <div class="col-lg-1">
-                        <a href="{% url 'shop_product:delete' car.id %}" class="btn btn-block btn-danger mt-5">Delete</a>
+                        <a href="{% url 'shop_product:delete' car.id %}" class="btn btn-block btn-danger mt-2">Delete</a>
                     </div>
                 </div>
             {% endfor %}

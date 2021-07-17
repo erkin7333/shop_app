@@ -8,7 +8,6 @@ from django.contrib.auth.hashers import make_password
 User = get_user_model()
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-from .decorators import customer_required
 from django.contrib import messages
 
 

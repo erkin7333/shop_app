@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <form action="{% url 'shop_product:save_adress' %}" method="post">
+        <div class="container">
+            <div class="row justify-content-center mt-4">
+                <div class="card" style="width: 25rem;">
+                    <div class="card-header">OrderItem</div>
+                    <div class="card-body">
+                        {% csrf_token %}
+                        {{ qwerty|crispy }}
+                    </div>
+                    <div class="card-footer text-muted">
+                        <button class="btn btn-block btn-primary">Saqlash</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

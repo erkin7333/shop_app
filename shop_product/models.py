@@ -75,7 +75,7 @@ class OrderItem(models.Model):
         return self.name
 
 class ShoppingAddress(models.Model):
-    order = models.OneToOneField(Order, on_delete=models.CASCADE, blank=True, null=True)
+    # order = models.OneToOneField(Order, on_delete=models.CASCADE, blank=True, null=True)
     address = models.CharField(max_length=200, blank=True, null=True)
     city = models.CharField(max_length=200, blank=True, null=True)
     postalCode = models.CharField(max_length=200, blank=True, null=True)

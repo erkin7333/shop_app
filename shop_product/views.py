@@ -2,17 +2,13 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView, View
 from .models import Product, Cart
 from django.db.models import F, Sum, Avg
+from .forms import AdressForm
+from django.contrib.auth.decorators import login_required
 
 class ProductView(ListView):
     model = Product
     template_name = "shop_product/product.html"
     context_object_name = 'products'
-    # def get_context_data(self, *, object_list=None, **kwargs):
-    #     context = {}
-    #     context['carts']= Cart.objects.filter(user=self.request.user)
-    #     context['products'] = self.model.objects.all()
-    #
-    #     return context
 
 class ProView(View):
 
@@ -23,13 +19,11 @@ class ProView(View):
         })
 
 
-
 def cart(request):
     carts = None
     if request.user.is_superuser:
         carts = Cart.objects.all()
         cart_sum = Cart.objects.filter(user=request.user).aggregate(Sum("product__price"))
-        print(cart_sum['product__price__sum'])
     else:
         cart_sum = Cart.objects.filter(user=request.user).aggregate(Sum("product__price"))
         carts = Cart.objects.filter(user=request.user)
@@ -38,7 +32,6 @@ def cart(request):
     }
     context['cart_sum'] = cart_sum['product__price__sum']
     return render(request, "shop_product/cart.html", context)
-
 
 def add_cart(request, id):
     product = Product.objects.get(id=id)
@@ -57,3 +50,21 @@ def cart_delete(request, pk):
     obj = Cart.objects.get(pk=pk)
     obj.delete()
     return redirect('shop_product:cart')
+
+# @login_required
+def adress(request):
+    qwerty = AdressForm()
+    context = {
+        'qwerty': qwerty
+    }
+    return render(request, 'shop_product/adress.html', context)
+
+
+# @login_required
+def adress_save(request):
+    if request.method == 'POST':
+        form = AdressForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("shop_product:save_adress")
+        return render(request, 'shop_product/adress.html')

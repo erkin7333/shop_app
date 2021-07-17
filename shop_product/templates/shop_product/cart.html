@@ -1,31 +1,47 @@
 {% extends 'layout.html' %}
-
+{% load cart_tags %}
 {% block content %}
-{#    <div class="container mt-4">#}
-        <table class="table table-bordered table-hover table-striped">
-            <tbody>
-            {% for car in carts %}
-                <div class="row border mt-4 ml-5" style="width: 50rem;">
-                    <div class="col-lg-3">
-                        <img src="{{ car.product.image.url }}" class="img-fluid img-thumbnail" style="width: 300px;" alt="...">
-                    </div>
-                    <div class="col-lg-2">
-                        <p>{{ car.product.name }}</p>
-                    </div>
-                    <div class="col-lg-2">
-                        <p>{{ car.product.category }}</p>
-                    </div>
-                    <div class="col-lg-2">
-                        <p>{{ car.product.brand }}</p>
-                    </div>
-                    <h4 class="text-capitalize"><strong>Jami summa: {{ cart_sum }}:sum</strong></h4>
-                    <div class="col-lg-2">
-                        <p>{{ car.product.price }}</p>
-                        <a href="{% url 'shop_product:delete' car.id %}" class="btn btn-block btn-danger mt-2">Delete</a>
-                    </div>
+
+    <table class="table table-bordered table-hover table-striped">
+        <tbody>
+        <div class="row">
+            <div class="col-lg-8">
+                {% for car in carts %}
+            <div class="row border mt-4 ml-5" style="width: 50rem;">
+                <div class="col-lg-3">
+                    <img src="{{ car.product.image.url }}" class="img-fluid img-thumbnail" style="width: 300px;"
+                         alt="...">
                 </div>
-            {% endfor %}
-            </tbody>
-        </table>
+                <div class="col-lg-2">
+                    <p>{{ car.product.name }}</p>
+                </div>
+                <div class="col-lg-2">
+                    <p>{{ car.product.category }}</p>
+                </div>
+                <div class="col-lg-2">
+                    <p>{{ car.product.brand }}</p>
+                </div>
+                <div class="col-lg-2">
+                    <p>{{ car.product.price }}</p>
+                    <a href="{% url 'shop_product:delete' car.id %}" class="btn btn-block btn-danger mt-2">Delete</a>
+                </div>
+            </div>
+        {% endfor %}
+
+            </div>
+            <div class="col-4 mt-4">
+                <div class="card align-items-center" style="width: 18rem;">
+                    <ul class="list-group list-group-flush">
+                        <p class="list-group-item text-center">{{ request.user|count_cart }}</p>
+                        <h4 class="text-capitalize text-center"><strong>Jami summa: {{ cart_sum }}:sum</strong></h4>
+                        <a href="{% url 'shop_product:adress' %}" class="btn btn-block btn-outline-primary">Order</a>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        </tbody>
+    </table>
+
     </div>
 {% endblock %}

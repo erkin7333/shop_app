@@ -2,43 +2,91 @@
 
 
 {% block content %}
-    <div class="container">
-        <table class="table table-bordered table-hover table-striped">
-            <tbody>
+    {#    <div class="container">#}
+    {#        <table class="table table-bordered table-hover table-striped">#}
+    {#            <tbody>#}
+    {#            <div class="row ml-3">#}
+    {#                {% for product in products %}#}
+    {#                    <div class="col-lg-4">#}
+    {#                        <div class="card-deck mt-5" style="width: 18rem;">#}
+    {#                            <div class="card">#}
+    {#                                <a href="{% url "shop_product:page_product" product.id %}" class="img">#}
+    {#                                    <img src="{{ product.image.url }}" class="img-fluid" alt="...">#}
+    {#                                </a>#}
+    {#                                <div class="card-body">#}
+    {#                                    <h5 class="card-title">{{ product.name }}</h5>#}
+    {#                                    <p class="card-text">{{ product.brnad }} {{ product.price }}</p>#}
+    {#                                    <i class="#}
+    {#                                    {% if product.rating < 0.5 %}far fa-star {% elif product.rating == 0.5 %} fa fa-star-half-alt {% else %} fa fa-star {% endif %} "#}
+    {#                                       aria-hidden="true" style="color: yellow"></i>#}
+    {#                                    <i class="#}
+    {#                                     {% if product.rating < 1.5 %}far fa-star {% elif product.rating == 1.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "#}
+    {#                                       aria-hidden="true" style="color: yellow"></i>#}
+    {#                                    <i class="#}
+    {#                                    {% if product.rating < 2.5 %}far fa-star{% elif product.rating == 2.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "#}
+    {#                                       aria-hidden="true" style="color: yellow"></i>#}
+    {#                                    <i class="#}
+    {#                                     {% if product.rating < 3.5 %}far fa-star{% elif product.rating == 3.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "#}
+    {#                                       aria-hidden="true" style="color: yellow"></i>#}
+    {#                                    <i class="#}
+    {#                                     {% if product.rating < 4.5 %}far fa-star{% elif product.rating == 4.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "#}
+    {#                                       aria-hidden="true" style="color: yellow"></i>#}
+    {#                                    <p>$ {{ product.price }}</p>#}
+    {#                                </div>#}
+    {#                            </div>#}
+    {#                        </div>#}
+    {#                    </div>#}
+    {#                {% endfor %}#}
+    {#            </div>#}
+    {#            </tbody>#}
+    {#        </table>#}
+    {#    </div>#}
+    <section class="section-margin calc-60px">
+        <div class="container">
+            <div class="section-intro pb-60px">
+                <p>Bozorda mashhur mahsulot</p>
+                <h2>Ommabop <span class="section-intro__style">Mahsulot</span></h2>
+            </div>
             <div class="row">
                 {% for product in products %}
-                    <div class="col-lg-4">
-                        <div class="card-deck mt-5" style="width: 18rem;">
-                            <div class="card">
-                                <a href="{% url "shop_product:page_product" product.id %}" class="img">
-                                    <img src="{{ product.image.url }}" class="img-fluid" alt="...">
-                                </a>
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ product.name }}</h5>
-                                    <p class="card-text">{{ product.brnad }} {{ product.price }}</p>
-                                    <i class="
-                                    {% if product.rating < 0.5 %}far fa-star {% elif product.rating == 0.5 %} fa fa-star-half-alt {% else %} fa fa-star {% endif %} "
-                                       aria-hidden="true" style="color: yellow"></i>
-                                    <i class="
-                                     {% if product.rating < 1.5 %}far fa-star {% elif product.rating == 1.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
-                                       aria-hidden="true" style="color: yellow"></i>
-                                    <i class="
-                                    {% if product.rating < 2.5 %}far fa-star{% elif product.rating == 2.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
-                                       aria-hidden="true" style="color: yellow"></i>
-                                    <i class="
-                                     {% if product.rating < 3.5 %}far fa-star{% elif product.rating == 3.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
-                                       aria-hidden="true" style="color: yellow"></i>
-                                    <i class="
-                                     {% if product.rating < 4.5 %}far fa-star{% elif product.rating == 4.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
-                                       aria-hidden="true" style="color: yellow"></i>
-                                    <p>$ {{ product.price }}</p>
-                                </div>
+                    <div class="col-md-6 col-lg-4 col-xl-3">
+                        <div class="card text-center card-product">
+                            <div class="card-product__img">
+                                <img class="card-img" src="{{ product.image.url }}" alt="">
+                                <ul class="card-product__imgOverlay">
+                                    <li>
+                                        <button><i class="ti-shopping-cart" href="{% url 'shop_product:add_cart' product.id %}"></i></button>
+                                    </li>
+                                    <li>
+                                        <button><i class="ti-heart"></i></button>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="card-body">
+                                <p>{{ product.name }}</p>
+                                <p>{{ product.brand }}</p>
+                                <h4 class="card-product__title"><a
+                                        href="{% url "shop_product:page_product" product.id %}">Ko'rish
+                                </a></h4>
+                                <i class="
+                                        {% if product.rating < 0.5 %}far fa-star {% elif product.rating == 0.5 %} fa fa-star-half-alt {% else %} fa fa-star {% endif %} "
+                                   aria-hidden="true" style="color: yellow"></i>
+                                <i class="
+                                         {% if product.rating < 1.5 %}far fa-star {% elif product.rating == 1.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
+                                   aria-hidden="true" style="color: yellow"></i>
+                                <i class="
+                                        {% if product.rating < 2.5 %}far fa-star{% elif product.rating == 2.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
+                                   aria-hidden="true" style="color: yellow"></i>
+                                <i class="
+                                         {% if product.rating < 3.5 %}far fa-star{% elif product.rating == 3.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
+                                   aria-hidden="true" style="color: yellow"></i>
+                                <p class="card-product__price"><strong>$</strong> {{ product.price }}</p>
                             </div>
                         </div>
                     </div>
                 {% endfor %}
             </div>
-            </tbody>
-        </table>
-    </div>
+        </div>
+    </section>
+
 {% endblock content %}

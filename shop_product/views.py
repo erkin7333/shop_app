@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView, View
 from .models import Product, Cart
 from django.db.models import F, Sum, Avg
-from .forms import AdressForm
+from .forms import AdressForm, AddProduct
 from django.contrib.auth.decorators import login_required
 
 class ProductView(ListView):
@@ -60,7 +60,6 @@ def adress(request):
     return render(request, 'shop_product/adress.html', context)
 
 
-# @login_required
 def adress_save(request):
     if request.method == 'POST':
         form = AdressForm(request.POST)
@@ -68,3 +67,20 @@ def adress_save(request):
             form.save()
             return redirect("shop_product:save_adress")
         return render(request, 'shop_product/adress.html')
+
+
+def add_product(request):
+    form = AddProduct()
+    context = {
+        'form': form
+    }
+    return render(request, "shop_product/add_product.html", context)
+
+
+# def addproduct(request):
+#     if request.method == 'POST':
+#         form = AddProduct()
+#         context = {
+#             'form': form
+#         }
+#         return render(request, 'shop_product/add_product.html', context)

@@ -5,11 +5,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
+
 User = get_user_model()
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
-
 
 
 class UserRegister(View):
@@ -49,10 +49,10 @@ def user_login(request):
 
     return render(request, 'account/login.html', {'form': form})
 
+
 def user_logout(request):
     logout(request)
     return redirect('shop_product:pro')
-
 
 
 def profile(request):
@@ -82,19 +82,5 @@ def profile(request):
     }
     return render(request, 'account/profil.html', context)
 
-# @customer_required
-# def profile(request):
-#     if request.method == 'POST':
-#         form = PasswordChangeForm(request.user, request.POST)
-#         if form.is_valid():
-#             user = form.save()
-#             update_session_auth_hash(request, user)  # Important!
-#             messages.success(request, 'Your password was successfully updated!')
-#             return redirect('account:profil')
-#         else:
-#             messages.error(request, 'Please correct the error below.')
-#     else:
-#         form = PasswordChangeForm(request.user)
-#     return render(request, 'account/profil.html', {
-#         'form': form
-#     })
+
+

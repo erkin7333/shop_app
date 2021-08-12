@@ -2,18 +2,32 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-    <div class="row mt-5">
-        <div class="col-lg-6 offset-4">
-            <div class="card border-success" style="width: 25rem;">
-                <div class="card-header bi-arrow-down-circle"> Tizimga kirish</div>
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ form|crispy }}
-                        <button type="submit" class="btn btn-outline-success">Saqlash</button>
-                    </form>
+    <section class="login_box_area section-margin">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="login_box_img">
+                        <div class="hover">
+                            <h4>Bizning veb -saytimizga yangi?</h4>
+                            <p>Har kuni ilm -fan va texnologiyada yutuqlar mavjud va buning yaqqol namunasi bu</p>
+                            <a class="button button-account" href="{% url 'account:register' %}">Yangi profil
+                                yaratish</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="login_form_inner">
+                        <h3>Tizimga kirish</h3>
+                        <form method="post">
+                            <div class="card ml-5" style="width: 27rem;">
+                                {% csrf_token %}
+                                {{ form|crispy }}
+                                <button type="submit" class="btn btn-block btn-outline-success">Saqlash</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 {% endblock %}

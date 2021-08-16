@@ -3,12 +3,25 @@ from django.views.generic import ListView, View
 from .models import Product, Cart
 from django.db.models import F, Sum, Avg
 from .forms import AdressForm, AddProduct
+from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 
 class ProductView(ListView):
     model = Product
     template_name = "shop_product/product.html"
     context_object_name = 'products'
+
+class ProductFilter(ListView):
+    model = Product
+    # context_object_name = 'filter_pro'
+    def get_queryset(self):
+        result = super(ProductFilter, self).get_queryset()
+        category_filter = self.request.GET.get('category')
+        if category_filter:
+            result = Product.objects.filter(Q(category__icontains=category_filter))
+        return result
+
+
 
 class ProView(View):
 
@@ -84,3 +97,17 @@ def add_product(request):
 #             'form': form
 #         }
 #         return render(request, 'shop_product/add_product.html', context)
+
+
+#
+def pro_category(request):
+    return render(request, 'shop_product/categorya.html', )
+
+
+# def pro_filter(request):
+#     filter_product = Product.objects.all()
+#     context = {
+#         'filter_product': filter_product
+#     }
+#
+#     return render(request, "layout.html", context)

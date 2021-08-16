@@ -6,6 +6,7 @@ from io import BytesIO
 from django.core.files import File
 
 
+
 class Product(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=200, null=True, blank=True)

@@ -38,14 +38,15 @@
                 </button>
                 <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                     <ul class="nav navbar-nav menu_nav ml-auto mr-auto">
-                        <li class="nav-item active"><a class="nav-link" href="{% url 'shop_product:pro' %}">Home</a></li>
+                        <li class="nav-item active"><a class="nav-link" href="{% url 'shop_product:pro' %}">Home</a>
+                        </li>
                         <li class="nav-item submenu dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
                                aria-haspopup="true"
                                aria-expanded="false">Shop</a>
                             <ul class="dropdown-menu">
                                 <li class="nav-item"><a class="nav-link"
-                                                        href="../shop_product/templates/shop_product/category.html">Shop
+                                                        href="{% url 'shop_product:category' %}">Shop
                                     Category</a></li>
                                 <li class="nav-item"><a class="nav-link"
                                                         href="../shop_product/templates/shop_product/single-product.html">Product
@@ -94,14 +95,16 @@
 
                     <ul class="nav-shop">
                         <li class="nav-item"><a class="nav-link" href="{% url 'account:login' %}">Login</a>
-                                </li>
-                         <li class="nav-item"><a class="nav-link"
-                                                        href="{% url 'account:register' %}">Register</a>
-                                </li>
-                        <li class="nav-item">
-                            <a href="{% url 'shop_product:cart' %}"><i class="ti-shopping-cart"> {{ request.user|count_cart }}</i></a>
                         </li>
-                        <li class="nav-item"><a class="button button-header" href="{% url 'account:profil' %}">{{ request.user }}</a></li>
+                        <li class="nav-item"><a class="nav-link"
+                                                href="{% url 'account:register' %}">Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'shop_product:cart' %}"><i
+                                    class="ti-shopping-cart"> {{ request.user|count_cart }}</i></a>
+                        </li>
+                        <li class="nav-item"><a class="button button-header"
+                                                href="{% url 'account:profil' %}">{{ request.user }}</a></li>
                     </ul>
                 </div>
             </div>
@@ -109,7 +112,7 @@
     </div>
 </header>
 <!--================ End Header Menu Area =================-->
-
+{{ filter_product }}
 <main class="site-main">
 
     <!--================ Hero banner start =================-->
@@ -132,8 +135,7 @@
         </div>
     </section>
 
-
-{% block content %}{% endblock %}
+    {% block content %}{% endblock %}
     <section class="section-margin calc-60px">
         <div class="container">
             <div class="section-intro pb-60px">
@@ -142,27 +144,30 @@
             </div>
             <div class="owl-carousel owl-theme" id="bestSellerCarousel">
                 <div class="card text-center card-product">
-                    <div class="card-product__img">
-                        <img class="img-fluid" src="{{ product.image.url }}" alt="">
-                        <ul class="card-product__imgOverlay">
-                            <li>
-                                <button><i class="ti-search"></i></button>
-                            </li>
-                            <li>
-                                <button><i class="ti-shopping-cart"></i></button>
-                            </li>
-                            <li>
-                                <button><i class="ti-heart"></i></button>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-body">
-                        <p>Accessories</p>
-                        <h4 class="card-product__title"><a
-                                href="../shop_product/templates/shop_product/single-product.html">Quartz Belt Watch</a>
-                        </h4>
-                        <p class="card-product__price">$150.00</p>
-                    </div>
+                    {% for re in result %}
+                        <div class="card-product__img">
+                            <img class="img-fluid" src="{{ re.image.url }}" alt="">
+                            <ul class="card-product__imgOverlay">
+                                <li>
+                                    <button><i class="ti-search"></i></button>
+                                </li>
+                                <li>
+                                    <button><i class="ti-shopping-cart"></i></button>
+                                </li>
+                                <li>
+                                    <button><i class="ti-heart"></i></button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <p>{{ re.price }}</p>
+                            <h4 class="card-product__title"><a
+                                    href="../shop_product/templates/shop_product/single-product.html">{{ filter_product }}
+                                Watch</a>
+                            </h4>
+                            <p class="card-product__price">{{ re.price }}</p>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

@@ -1,5 +1,5 @@
 from django import template
-from shop_product.models import Cart
+from shop_product.models import Cart, Product
 
 register = template.Library()
 
@@ -7,3 +7,4 @@ register = template.Library()
 def count_cart(user):
     obj = Cart.objects.filter(user=user)
     return obj.count()
+

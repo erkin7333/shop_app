@@ -10,6 +10,8 @@ class ProductView(ListView):
     model = Product
     template_name = "shop_product/product.html"
     context_object_name = 'products'
+    paginate_by = 4
+    # ordering = ['-added_at']
 
 class ProductFilter(ListView):
     model = Product

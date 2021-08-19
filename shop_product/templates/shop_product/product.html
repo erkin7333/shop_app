@@ -55,7 +55,8 @@
                                 <img class="card-img" src="{{ product.image.url }}" alt="">
                                 <ul class="card-product__imgOverlay">
                                     <li>
-                                        <button><i class="ti-shopping-cart" href="{% url 'shop_product:add_cart' product.id %}"></i></button>
+                                        <button><i class="ti-shopping-cart"
+                                                   href="{% url 'shop_product:add_cart' product.id %}"></i></button>
                                     </li>
                                     <li>
                                         <button><i class="ti-heart"></i></button>
@@ -85,6 +86,23 @@
                         </div>
                     </div>
                 {% endfor %}
+            </div>
+        </div>
+        <div class="row justify-content-center pt-2 pb-2">
+            <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline bg-primary">««</a>
+                {% endif %}
+
+                <span class="current text-light btn bg-primary">
+                    {{ page_obj.number }}
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline bg-primary"> »»</a>
+                {% endif %}
+            </span>
             </div>
         </div>
     </section>

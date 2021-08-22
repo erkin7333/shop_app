@@ -13,6 +13,7 @@ urlpatterns = [
     path('save_adress/', adress_save, name='save_adress'),
     path('add_pro/', add_product, name='add_pro'),
     path('category/', pro_category, name='category'),
-    path('category_filter/', ProductFilter.as_view(), name='category_filter')
+    path('category_filter/', ProductFilter.as_view(), name='category_filter'),
+    path('product_edit/<int:pk>/', ProductEdit.as_view(), name='product_edit'),
     # path('pro_filter/', pro_filter, name='pro_filter')
 ]

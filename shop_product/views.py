@@ -1,10 +1,12 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, View
+from django.views.generic import ListView, View, UpdateView
 from .models import Product, Cart
 from django.db.models import F, Sum, Avg
 from .forms import AdressForm, AddProduct
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
+
 
 class ProductView(ListView):
     model = Product
@@ -13,8 +15,10 @@ class ProductView(ListView):
     paginate_by = 4
     # ordering = ['-added_at']
 
+
 class ProductFilter(ListView):
     model = Product
+
     # context_object_name = 'filter_pro'
     def get_queryset(self):
         result = super(ProductFilter, self).get_queryset()
@@ -22,7 +26,6 @@ class ProductFilter(ListView):
         if category_filter:
             result = Product.objects.filter(Q(category__icontains=category_filter))
         return result
-
 
 
 class ProView(View):
@@ -48,6 +51,7 @@ def cart(request):
     context['cart_sum'] = cart_sum['product__price__sum']
     return render(request, "shop_product/cart.html", context)
 
+
 def add_cart(request, id):
     product = Product.objects.get(id=id)
     user = request.user
@@ -65,6 +69,7 @@ def cart_delete(request, pk):
     obj = Cart.objects.get(pk=pk)
     obj.delete()
     return redirect('shop_product:cart')
+
 
 # @login_required
 def adress(request):
@@ -92,24 +97,16 @@ def add_product(request):
     return render(request, "shop_product/add_product.html", context)
 
 
-# def addproduct(request):
-#     if request.method == 'POST':
-#         form = AddProduct()
-#         context = {
-#             'form': form
-#         }
-#         return render(request, 'shop_product/add_product.html', context)
-
-
-#
 def pro_category(request):
     return render(request, 'shop_product/categorya.html', )
 
 
-# def pro_filter(request):
-#     filter_product = Product.objects.all()
-#     context = {
-#         'filter_product': filter_product
-#     }
-#
-#     return render(request, "layout.html", context)
+class ProductEdit(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Product
+    template_name = "shop_product/product_edit.html"
+    success_url = "/"
+    fields = '__all__'
+
+    def test_func(self):
+        obj = self.get_object()
+        return self.request.user.is_superuser or obj.user == self.request.user

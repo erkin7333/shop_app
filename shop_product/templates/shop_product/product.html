@@ -82,6 +82,9 @@
                                          {% if product.rating < 3.5 %}far fa-star{% elif product.rating == 3.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
                                    aria-hidden="true" style="color: yellow"></i>
                                 <p class="card-product__price"><strong>$</strong> {{ product.price }}</p>
+                                {% if user.is_authenticated and product.user_id == user.id or user.is_staff %}
+                            <a class="" href="{% url 'shop_product:product_edit' product.id %}"><small><i>Edit</i></small></a>
+                              {% endif %}
                             </div>
                         </div>
                     </div>

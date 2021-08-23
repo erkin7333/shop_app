@@ -1,14 +1,21 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, View
+from django.views.generic import ListView, View, UpdateView
 from .models import Product, Cart
 from django.db.models import F, Sum, Avg
 from .forms import AdressForm, AddProduct
-from django.core.paginator import Paginator
+
+from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+
+
+
 class ProductView(ListView):
     model = Product
     template_name = "shop_product/product.html"
     context_object_name = 'products'
     paginate_by = 4
+
 
 # def products(request):
 #     queryset = Product.objects.all()
@@ -17,6 +24,21 @@ class ProductView(ListView):
 #     page_number = request.GET.get('page')
 #     page_obj = paginator.get_page(page_number)
 #     return render(request, 'shop_product/product.html', {'page_obj':page_obj})
+    # ordering = ['-added_at']
+
+
+class ProductFilter(ListView):
+    model = Product
+
+    # context_object_name = 'filter_pro'
+    def get_queryset(self):
+        result = super(ProductFilter, self).get_queryset()
+        category_filter = self.request.GET.get('category')
+        if category_filter:
+            result = Product.objects.filter(Q(category__icontains=category_filter))
+        return result
+
+
 class ProView(View):
 
     def get(self, request, id, *args, **kwargs):
@@ -41,7 +63,6 @@ def cart(request):
     return render(request, "shop_product/cart.html", context)
 
 
-
 def add_cart(request, id):
     product = Product.objects.get(id=id)
     user = request.user
@@ -59,7 +80,6 @@ def cart_delete(request, pk):
     obj = Cart.objects.get(pk=pk)
     obj.delete()
     return redirect('shop_product:cart')
-
 
 
 def adress(request):
@@ -102,3 +122,16 @@ def add_product(request):
 #
 #     return render(request, 'shop_product/categorya.html', {"products":products})
 #
+def pro_category(request):
+    return render(request, 'shop_product/categorya.html', )
+
+
+class ProductEdit(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Product
+    template_name = "shop_product/product_edit.html"
+    success_url = "/"
+    fields = '__all__'
+
+    def test_func(self):
+        obj = self.get_object()
+        return self.request.user.is_superuser or obj.user == self.request.user

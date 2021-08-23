@@ -3,28 +3,20 @@ from django.views.generic import ListView, View
 from .models import Product, Cart
 from django.db.models import F, Sum, Avg
 from .forms import AdressForm, AddProduct
-from django.db.models import Q
-from django.contrib.auth.decorators import login_required
-
+from django.core.paginator import Paginator
 class ProductView(ListView):
     model = Product
     template_name = "shop_product/product.html"
     context_object_name = 'products'
     paginate_by = 4
-    # ordering = ['-added_at']
 
-class ProductFilter(ListView):
-    model = Product
-    # context_object_name = 'filter_pro'
-    def get_queryset(self):
-        result = super(ProductFilter, self).get_queryset()
-        category_filter = self.request.GET.get('category')
-        if category_filter:
-            result = Product.objects.filter(Q(category__icontains=category_filter))
-        return result
-
-
-
+# def products(request):
+#     queryset = Product.objects.all()
+#     paginator = Paginator(queryset, 8) # Show 25 contacts per page.
+#
+#     page_number = request.GET.get('page')
+#     page_obj = paginator.get_page(page_number)
+#     return render(request, 'shop_product/product.html', {'page_obj':page_obj})
 class ProView(View):
 
     def get(self, request, id, *args, **kwargs):
@@ -48,6 +40,8 @@ def cart(request):
     context['cart_sum'] = cart_sum['product__price__sum']
     return render(request, "shop_product/cart.html", context)
 
+
+
 def add_cart(request, id):
     product = Product.objects.get(id=id)
     user = request.user
@@ -66,7 +60,8 @@ def cart_delete(request, pk):
     obj.delete()
     return redirect('shop_product:cart')
 
-# @login_required
+
+
 def adress(request):
     qwerty = AdressForm()
     context = {
@@ -102,14 +97,8 @@ def add_product(request):
 
 
 #
-def pro_category(request):
-    return render(request, 'shop_product/categorya.html', )
-
-
-# def pro_filter(request):
-#     filter_product = Product.objects.all()
-#     context = {
-#         'filter_product': filter_product
-#     }
+# def pro_category(request):
+#     products = Product.objects.filter(brand__icontains='Apple')
 #
-#     return render(request, "layout.html", context)
+#     return render(request, 'shop_product/categorya.html', {"products":products})
+#

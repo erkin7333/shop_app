@@ -28,7 +28,7 @@
                         <div class="head">Maxsulot Categoriyalari</div>
                         <div class="main-categories">
                             <ul>
-                                <a href="{% url 'shop_product:pro_filter' %}"
+{#                                <a href="{% url 'shop_product:pro_filter' %}"#}
                                    class="btn btn-block btn-danger">vsdfkm</a>
                             </ul>
                         </div>
@@ -61,12 +61,12 @@
                 <div class="col-xl-9 col-lg-8 col-md-7">
                     <section class="lattest-product-area pb-40 category-list">
                         <div class="row">
-                            {{ filter_product }}
-{#                            {% for r in filter_product %}#}
+{#                            {{ filter_product }}#}
+                            {% for r in products %}
                                 <div class="col-md-6 col-lg-4">
                                     <div class="card text-center card-product">
                                         <div class="card-product__img">
-                                            <img class="card-img" src="" alt="">
+                                            <img class="card-img" src="{{ r.image.url }}" alt="">
                                             <ul class="card-product__imgOverlay">
                                                 <li>
                                                     <button><i class="ti-search"></i></button>
@@ -86,7 +86,7 @@
                                         </div>
                                     </div>
                                 </div>
-{#                            {% endfor %}#}
+                            {% endfor %}
                         </div>
                     </section>
                     <!-- End Best Seller -->

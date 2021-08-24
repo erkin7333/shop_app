@@ -42,70 +42,92 @@
     {##}
     {#        </tbody>#}
     {#    </table>#}
-    <section class="cart_area">
+    {#    <section class="cart_area">#}
+    {#        <div class="container">#}
+    {#            <div class="cart_inner">#}
+    {#                <div class="table-responsive">#}
+    {#                    <table class="table table-bordered table-hover table-striped">#}
+    {#                        <thead>#}
+    {#                        <div class="row">#}
+    {#                            <tr>#}
+    {#                                <th scope="col">Product</th>#}
+    {#                                <th scope="col">Price</th>#}
+    {#                                <th scope="col">Quantity</th>#}
+    {#                                <th scope="col">Product Delet</th>#}
+    {#                            </tr>#}
+    {#                            <div class="col-lg-12">#}
+    {#                                <div class="cart">#}
+    {#                                    <h5>Cart Total</h5>#}
+    {#                                    <ul class="col-lg-12">#}
+    {#                                        <li><span>subtotal:</span> <span>$140.00</span></li>#}
+    {#                                        <li><span>delivery:</span> <span>Free</span></li>#}
+    {#                                        <li><span>total:</span> <span>$ {{ cart_sum }}</span></li>#}
+    {#                                    </ul>#}
+    {#                                    <a href="#" class="btn amado-btn w-100">Checkout</a>#}
+    {#                                </div>#}
+    {#                            </div>#}
+    {#                        </div>#}
+    {#                        </thead>#}
+    {#                        <tbody>#}
+    {##}
+    {#                        </tbody>#}
+    {#                    </table>#}
+    {#                </div>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </section>#}
+    <section class="checkout_area section-margin--small">
         <div class="container">
-            <div class="cart_inner">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover table-striped">
-                        <thead>
-                        <div class="row">
+            <div class="billing_details">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead>
                             <tr>
-                                <th scope="col">Product</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Product Delet</th>
+                                <th scope="col" class="text-center">Product Foto</th>
+                                <th scope="col" class="text-center">Name</th>
+                                <th scope="col" class="text-center">Price</th>
+                                <th scope="col" class="text-center">Quantity</th>
                             </tr>
-                            <div class="col-lg-12">
-                                <div class="cart">
-                                    <h5>Cart Total</h5>
-                                    <ul class="col-lg-12">
-                                        <li><span>subtotal:</span> <span>$140.00</span></li>
-                                        <li><span>delivery:</span> <span>Free</span></li>
-                                        <li><span>total:</span> <span>$ {{ cart_sum }}</span></li>
-                                    </ul>
-                                    <a href="#" class="btn amado-btn w-100">Checkout</a>
-                                </div>
+                            </thead>
+                        </table>
+                        {% for car in carts %}
+                            <div class="mt-4" style="border-top: solid;">
+                                <tr>
+                                    <td>
+                                        <div class="media mt-2">
+                                            <div class="d-flex">
+                                                <img class="img-fluid" src="{{ car.product.image.url }}"
+                                                     style="width: 200px; height: 150px;" alt="">
+                                            </div>
+                                            <div class="col">{{ car.product.name }}</div>
+                                            <div class="col">{{ car.product.price }}</div>
+                                            <div class="col">{{ car.product.name }}</div>
+
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'shop_product:delete' car.id %}"
+                                           class="btn btn-block btn-danger mt-2">Delete</a>
+                                    </td>
+                                </tr>
+                            </div>
+
+                        {% endfor %}
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="order_box">
+                            <h2 class="text-center">Your Order</h2>
+                            <ul class="list">
+                                <li><strong>Jami product:</strong> <span class="ml-5">{{ carts.count }}</span></li>
+                                <li><strong>Yetkazib berish:</strong> <span class="ml-5">Free</span></li>
+                                <li><strong>Jami summa:</strong> <span class="ml-5">$ {{ cart_sum }}</span></li>
+                            </ul>
+                            <div class="text-center">
+                                <a class="button button-paypal" href="#">Chekout</a>
                             </div>
                         </div>
-                        </thead>
-                        <tbody>
-                        {% for car in carts %}
-                            <tr>
-                                <td>
-                                    <div class="media">
-                                        <div class="d-flex">
-                                            <img class="img-fluid" src="{{ car.product.image.url }}"
-                                                 style="width: 200px; height: 150px;" alt="">
-                                        </div>
-                                        <div class="media-body">
-                                            <p>{{ car.product.name }}</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <h5>${{ car.product.price }}</h5>
-                                </td>
-                                <td>
-                                    <div class="product_count">
-                                        <input type="text" name="qty" id="sst" maxlength="12" value="1"
-                                               title="Quantity:"
-                                               class="input-text qty">
-                                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-                                                class="increase items-count" type="button"><i
-                                                class="lnr lnr-chevron-up"></i></button>
-                                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-                                                class="reduced items-count" type="button"><i
-                                                class="lnr lnr-chevron-down"></i></button>
-                                    </div>
-                                </td>
-                                <td>
-                                    <a href="{% url 'shop_product:delete' car.id %}"
-                                       class="btn btn-block btn-danger mt-2">Delete</a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                    </div>
                 </div>
             </div>
         </div>

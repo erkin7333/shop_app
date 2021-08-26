@@ -13,4 +13,9 @@ urlpatterns = [
     path('save_adress/', adress_save, name='save_adress'),
     path('add_pro/', add_product, name='add_pro'),
     path('product_edit/<int:pk>/', ProductEdit.as_view(), name='product_edit'),
+    path('all_delete/', all_delete, name='all-delete'),
+    # path('category/', category_filter, name='category'),
+    path('category/<int:pk>/', category_by_id, name='category_by_id'),
+    path('brand/<int:pk>/', brand_by_id, name='brand'),
+    path('product_all/', product_all, name='all_product')
 ]

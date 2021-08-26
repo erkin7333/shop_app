@@ -19,7 +19,7 @@
                     <div class="login_form_inner">
                         <h3>Tizimga kirish</h3>
                         <form method="post">
-                            <div class="card ml-5" style="width: 27rem;">
+                            <div class="card ml-5 align-items-center" style="width: 27rem;">
                                 {% csrf_token %}
                                 {{ form|crispy }}
                                 <button type="submit" class="btn btn-block btn-outline-success">Saqlash</button>

@@ -1,15 +1,11 @@
 {% extends 'layout.html' %}
 
-{% load category_filter %}
-
-
-
 {% block content %}
     <section class="blog-banner-area" id="category">
         <div class="container h-100">
             <div class="blog-banner">
                 <div class="text-center">
-                    <h1>Maxsulotlarni categoriyalar asosida xarid qiling</h1>
+                    <h1>Maxsulotlarni brendlar <br> asosida xarid qiling</h1>
                     <nav aria-label="breadcrumb" class="banner-breadcrumb">
                         <ol class="breadcrumb">
                             <h5 class="breadcrumb-item"><a href="{% url 'shop_product:pro' %}"><strong>Home</strong></a></h5>
@@ -23,26 +19,26 @@
         <div class="container">
             <div class="row">
                 <div class="col-xl-3 col-lg-4 col-md-5">
-                    <div class="sidebar-categories">
-                        <div class="head text-center">Brand</div>
-                        <div class="main-categories">
-                            {% for re in brand_all %}
+                    <div class="sidebar-filter">
+                        <div class="top-filter-head text-center">Brand</div>
+                        <div class="common-filter">
+                            {% for de in brand_all %}
                                 <ul>
-                                    <a href="{% url "shop_product:brand" re.id %}"
-                                       class="button button-paypal text-center mt-3">{{ re.name }}</a>
+                                    <a href="{% url 'shop_product:brand' de.id %}"
+                                       class="button button-paypal text-center mt-3">{{ de.name }}</a>
                                 </ul>
                             {% endfor %}
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-9 col-lg-8 col-md-7">
+                <div class="col-xl-9 col-lg-8 col-md-7 mt-5">
                     <section class="lattest-product-area pb-40 category-list">
                         <div class="row">
-                            {% for rm in category_f %}
+                            {% for brend in brand_f %}
                                 <div class="col-md-6 col-lg-4">
                                     <div class="card text-center card-product">
                                         <div class="card-product__img">
-                                            <img class="card-img" src="{{ rm.image.url }}" alt="">
+                                            <img class="card-img" src="{{ brend.image.url }}" alt="">
                                             <ul class="card-product__imgOverlay">
                                                 <li>
                                                     <button><i class="ti-search"></i></button>
@@ -56,17 +52,19 @@
                                             </ul>
                                         </div>
                                         <div class="card-body">
-                                            <p>{{ rm.category }}</p>
+                                            <p>{{ brend.brand.name }}</p>
                                             <h4 class="card-product__title"><a href="#">Quartz Belt Watch</a></h4>
-                                            <p class="card-product__price">$ {{ rm.price }}</p>
+                                            <p class="card-product__price">$ {{ brend.price }}</p>
                                         </div>
                                     </div>
                                 </div>
                             {% endfor %}
                         </div>
                     </section>
+                    <!-- End Best Seller -->
                 </div>
             </div>
         </div>
     </section>
 {% endblock %}
+

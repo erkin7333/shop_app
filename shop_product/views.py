@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, View, UpdateView
-from .models import Product, Cart
+from .models import Product, Cart, Category, Brand
 from django.db.models import F, Sum, Avg
 from .forms import AdressForm, AddProduct
 
@@ -77,9 +77,15 @@ def add_cart(request, id):
 
 
 def cart_delete(request, pk):
-    obj = Cart.objects.get(pk=pk)
+    obj = Cart.objects.get(product_id=pk)
     obj.delete()
     return redirect('shop_product:cart')
+
+def all_delete(request):
+    obj = Cart.objects.all()
+    obj.delete()
+    return redirect('shop_product:cart')
+
 
 
 def adress(request):
@@ -135,3 +141,39 @@ class ProductEdit(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         obj = self.get_object()
         return self.request.user.is_superuser or obj.user == self.request.user
+
+
+# def category_filter(request):
+#     cat = Category.objects.all()
+#     context = {
+#         'cat': cat,
+#     }
+#     return render(request, 'shop_product/categorya.html', context)
+
+
+def category_by_id(request, pk):
+    category_f = Product.objects.filter(category_id=pk)
+    brand_all = Brand.objects.all()
+    context = {
+        'category_f': category_f,
+        'brand_all': brand_all,
+    }
+    return render(request, 'shop_product/categorya.html', context)
+
+def product_all(request,):
+    cat = Category.objects.all()
+    all_product = Product.objects.all()
+    context = {
+        'cat': cat,
+        "all_product": all_product,
+    }
+    return render(request, 'shop_product/all_category.html', context)
+
+def brand_by_id(request, pk):
+    brand_f = Product.objects.filter(brand_id=pk)
+    brand_all = Brand.objects.all()
+    context = {
+        'brand_f': brand_f,
+        'brand_all': brand_all,
+    }
+    return render(request, "shop_product/brand.html", context)

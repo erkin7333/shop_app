@@ -46,7 +46,7 @@
                                aria-expanded="false">Shop</a>
                             <ul class="dropdown-menu">
                                 <li class="nav-item"><a class="nav-link"
-                                                        href="">Shop
+                                                        href="{% url 'shop_product:all_product' %}">Shop
                                     Category</a></li>
                                 <li class="nav-item"><a class="nav-link"
                                                         href="../shop_product/templates/shop_product/single-product.html">Product
@@ -115,62 +115,45 @@
 <main class="site-main">
 
     <!--================ Hero banner start =================-->
-    <section class="hero-banner">
-        <div class="container">
-            <div class="row no-gutters align-items-center pt-60px">
-                <div class="col-5 d-none d-sm-block">
-                    <div class="hero-banner__img">
-                        <img src="{% static 'image/hero-banner.png' %}" style="width: 353px; height: 400px;" class="img-fluid" alt="Erkin">
-                    </div>
-                </div>
-                <div class="col-sm-7 col-lg-6 offset-lg-1 pl-4 pl-md-5 pl-lg-0">
-                    <div class="hero-banner__content">
-                        <h4>Do'kon qiziqarli</h4>
-                        <h1>Premium mahsulotimizni ko'rib chiqing</h1>
-                        <a class="button button-hero" href="#">Hozir ko'rib chiqish</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+
 
     {% block content %}{% endblock %}
-    <section class="section-margin calc-60px">
-        <div class="container">
-            <div class="section-intro pb-60px">
-                <p>Bozorda mashhur mahsulot</p>
-                <h2>Eng yaxshisi <span class="section-intro__style">Sotuvchilar</span></h2>
-            </div>
-            <div class="owl-carousel owl-theme" id="bestSellerCarousel">
-                <div class="card text-center card-product">
-                    {% for re in result %}
-                        <div class="card-product__img">
-                            <img class="img-fluid" src="{{ re.image.url }}" alt="">
-                            <ul class="card-product__imgOverlay">
-                                <li>
-                                    <button><i class="ti-search"></i></button>
-                                </li>
-                                <li>
-                                    <button><i class="ti-shopping-cart"></i></button>
-                                </li>
-                                <li>
-                                    <button><i class="ti-heart"></i></button>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="card-body">
-                            <p>{{ re.price }}</p>
-                            <h4 class="card-product__title"><a
-                                    href="../shop_product/templates/shop_product/single-product.html">{{ filter_product }}
-                                Watch</a>
-                            </h4>
-                            <p class="card-product__price">{{ re.price }}</p>
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </section>
+{#    <section class="section-margin calc-60px">#}
+{#        <div class="container">#}
+{#            <div class="section-intro pb-60px">#}
+{#                <p>Bozorda mashhur mahsulot</p>#}
+{#                <h2>Eng yaxshisi <span class="section-intro__style">Sotuvchilar</span></h2>#}
+{#            </div>#}
+{#            <div class="owl-carousel owl-theme" id="bestSellerCarousel">#}
+{#                <div class="card text-center card-product">#}
+{#                    {% for re in result %}#}
+{#                        <div class="card-product__img">#}
+{#                            <img class="img-fluid" src="{{ re.image.url }}" alt="">#}
+{#                            <ul class="card-product__imgOverlay">#}
+{#                                <li>#}
+{#                                    <button><i class="ti-search"></i></button>#}
+{#                                </li>#}
+{#                                <li>#}
+{#                                    <button><i class="ti-shopping-cart"></i></button>#}
+{#                                </li>#}
+{#                                <li>#}
+{#                                    <button><i class="ti-heart"></i></button>#}
+{#                                </li>#}
+{#                            </ul>#}
+{#                        </div>#}
+{#                        <div class="card-body">#}
+{#                            <p>{{ re.price }}</p>#}
+{#                            <h4 class="card-product__title"><a#}
+{#                                    href="../shop_product/templates/shop_product/single-product.html">{{ filter_product }}#}
+{#                                Watch</a>#}
+{#                            </h4>#}
+{#                            <p class="card-product__price">{{ re.price }}</p>#}
+{#                        </div>#}
+{#                    {% endfor %}#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </section>#}
     <!-- ================ Best Selling item  carousel end ================= -->
 
     <!-- ================ Blog section start ================= -->

@@ -1,6 +1,8 @@
 <!doctype html>
 {% load static %}
 {% load cart_tags %}
+
+
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
@@ -10,7 +12,7 @@
     <title>SHOP</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
           referrerpolicy="no-referrer"/>
-    <link rel="stylesheet" href="{% static "account/bootstrap/css/bootstrap.css" %}"/>
+    <link rel="stylesheet" href="{% static 'account/bootstrap/css/bootstrap.css' %}"/>
     <link rel="stylesheet" href="{% static 'account/bootstrap-icon/bootstrap-icons.css' %}"/>
     <link rel="stylesheet" href="{% static 'account/fontawesome/css/all.min.css' %}">
     <link rel="stylesheet" href="{% static 'account/themify-icons/themify-icons.css' %}">
@@ -20,7 +22,7 @@
     <link rel="stylesheet" href="{% static 'account/nice-select/nice-select.css' %}">
     <link rel="stylesheet" href="{% static 'account/nouislider/nouislider.min.css' %}">
     <link rel="stylesheet" href="{% static 'main/styles.css' %}">
-    <link rel="stylesheet" href="{% static "main/style.css" %}"/>
+    <link rel="stylesheet" href="{% static 'main/style.css' %}"/>
 
 </head>
 <body>
@@ -81,6 +83,8 @@
                                aria-haspopup="true"
                                aria-expanded="false">Pages</a>
                             <ul class="dropdown-menu">
+
+
                                 <li class="nav-item"><a class="nav-link" href="{% url 'account:login' %}">Login</a>
                                 </li>
                                 <li class="nav-item"><a class="nav-link"
@@ -94,15 +98,21 @@
                     </ul>
 
                     <ul class="nav-shop">
+                         
                         <li class="nav-item"><a class="nav-link" href="{% url 'account:login' %}">Login</a>
                         </li>
                         <li class="nav-item"><a class="nav-link"
                                                 href="{% url 'account:register' %}">Register</a>
                         </li>
-                        <li class="nav-item">
-{#                            <a href="{% url 'shop_product:cart' %}"><i#}
+                        <!-- <li class="nav-item">
+{#                            <a href="{% url 'shop_product:cart' %}"><i>#}
 {#                                    class="ti-shopping-cart"> {{ request.user|count_cart }}</i></a>#}
-                        </li>
+                        </li> -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'shop_product:order-summary' %}">Cart
+                                    <span class="badge red z-depth-1 mr-1"> {{ request.user|cart_item_count }} </span>
+                             <i class="fas fa-shopping-cart"></i>
+                         </a></li>
                         <li class="nav-item"><a class="button button-header"
                                                 href="{% url 'account:profil' %}">{{ request.user }}</a></li>
                     </ul>
@@ -111,6 +121,18 @@
         </nav>
     </div>
 </header>
+    <div class="mt-5 pt-4">
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% endfor %}
+    {% endif %}
+    </div>
 <!--================ End Header Menu Area =================-->
 <main class="site-main">
 
@@ -174,111 +196,7 @@
     <!-- ================ Best Selling item  carousel end ================= -->
 
     <!-- ================ Blog section start ================= -->
-{#    <section class="blog">#}
-{#        <div class="container">#}
-{#            <div class="section-intro pb-60px">#}
-{#                <p>Bozorda mashhur mahsulot</p>#}
-{#                <h2>Oxirgi <span class="section-intro__style">Yangiliklar</span></h2>#}
-{#            </div>#}
-{##}
-{#            <div class="row">#}
-{#                <div class="col-md-6 col-lg-4 mb-4 mb-lg-0">#}
-{#                    <div class="card card-blog">#}
-{#                        <div class="card-blog__img">#}
-{#                            <img class="card-img rounded-0" src="../account/static/img/blog/blog1.png" alt="">#}
-{#                        </div>#}
-{#                        <div class="card-body">#}
-{#                            <ul class="card-blog__info">#}
-{#                                <li><a href="#">By Admin</a></li>#}
-{#                                <li><a href="#"><i class="ti-comments-smiley"></i> 2 Comments</a></li>#}
-{#                            </ul>#}
-{#                            <h4 class="card-blog__title"><a#}
-{#                                    href="../shop_product/templates/shop_product/single-blog.html">The Richland Center#}
-{#                                Shooping News#}
-{#                                and weekly shooper</a></h4>#}
-{#                            <p>Let one fifth i bring fly to divided face for bearing divide unto seed. Winged divided#}
-{#                                light Forth.</p>#}
-{#                            <a class="card-blog__link" href="#">Read More <i class="ti-arrow-right"></i></a>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{##}
-{#                <div class="col-md-6 col-lg-4 mb-4 mb-lg-0">#}
-{#                    <div class="card card-blog">#}
-{#                        <div class="card-blog__img">#}
-{#                            <img class="card-img rounded-0" src="../account/static/img/blog/blog2.png" alt="">#}
-{#                        </div>#}
-{#                        <div class="card-body">#}
-{#                            <ul class="card-blog__info">#}
-{#                                <li><a href="#">By Admin</a></li>#}
-{#                                <li><a href="#"><i class="ti-comments-smiley"></i> 2 Comments</a></li>#}
-{#                            </ul>#}
-{#                            <h4 class="card-blog__title"><a#}
-{#                                    href="../shop_product/templates/shop_product/single-blog.html">The Shopping News#}
-{#                                also offers#}
-{#                                top-quality printing services</a></h4>#}
-{#                            <p>Let one fifth i bring fly to divided face for bearing divide unto seed. Winged divided#}
-{#                                light Forth.</p>#}
-{#                            <a class="card-blog__link" href="#">Read More <i class="ti-arrow-right"></i></a>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{##}
-{#                <div class="col-md-6 col-lg-4 mb-4 mb-lg-0">#}
-{#                    <div class="card card-blog">#}
-{#                        <div class="card-blog__img">#}
-{#                            <img class="card-img rounded-0" src="../account/static/img/blog/blog3.png" alt="">#}
-{#                        </div>#}
-{#                        <div class="card-body">#}
-{#                            <ul class="card-blog__info">#}
-{#                                <li><a href="#">By Admin</a></li>#}
-{#                                <li><a href="#"><i class="ti-comments-smiley"></i> 2 Comments</a></li>#}
-{#                            </ul>#}
-{#                            <h4 class="card-blog__title"><a#}
-{#                                    href="../shop_product/templates/shop_product/single-blog.html">Professional design#}
-{#                                staff and#}
-{#                                efficient equipment you’ll find we offer</a></h4>#}
-{#                            <p>Let one fifth i bring fly to divided face for bearing divide unto seed. Winged divided#}
-{#                                light Forth.</p>#}
-{#                            <a class="card-blog__link" href="#">Read More <i class="ti-arrow-right"></i></a>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#    </section>#}
-{#    <!-- ================ Blog section end ================= -->#}
-{##}
-{#    <!-- ================ Subscribe section start ================= -->#}
-{#    <section class="subscribe-position">#}
-{#        <div class="container">#}
-{#            <div class="subscribe text-center">#}
-{#                <h3 class="subscribe__title">Get Update From Anywhere</h3>#}
-{#                <p>Bearing Void gathering light light his eavening unto dont afraid</p>#}
-{#                <div id="mc_embed_signup">#}
-{#                    <form target="_blank"#}
-{#                          action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"#}
-{#                          method="get" class="subscribe-form form-inline mt-5 pt-1">#}
-{#                        <div class="form-group ml-sm-auto">#}
-{#                            <input class="form-control mb-1" type="email" name="EMAIL" placeholder="Enter your email"#}
-{#                                   onfocus="this.placeholder = ''" onblur="this.placeholder = 'Your Email Address '">#}
-{#                            <div class="info"></div>#}
-{#                        </div>#}
-{#                        <button class="button button-subscribe mr-auto mb-1" type="submit">Subscribe Now</button>#}
-{#                        <div style="position: absolute; left: -5000px;">#}
-{#                            <input name="b_36c4fd991d266f23781ded980_aefe40901a" tabindex="-1" value="" type="text">#}
-{#                        </div>#}
-{##}
-{#                    </form>#}
-{#                </div>#}
-{##}
-{#            </div>#}
-{#        </div>#}
-{#    </section>#}
-{#    <!-- ================ Subscribe section end ================= -->#}
-{##}
-{##}
-{#</main>#}
+
 
 
 <!--================ Start footer Area  =================-->
@@ -369,7 +287,7 @@
 </footer>
 
 
-<script src="{% static "account/jquery-3.6.0.min.js" %}"></script>
+<script src="{% static 'account/jquery-3.6.0.min.js' %}"></script>
 <script src="{% static 'account/jquery/jquery-3.2.1.min.js' %}"></script>
 <script src="{% static 'account/bootstrap/js/bootstrap.bundle.js' %}"></script>
 <script src="{% static 'account/skrollr.min.js' %}"></script>
@@ -379,7 +297,7 @@
 <script src="{% static 'account/mail-script.js' %}"></script>
 <script src="{% static 'js/main.js' %}"></script>
 <script src="{% static 'main/java.js' %}"></script>
-
+</main>
 </body>
 </html>
 

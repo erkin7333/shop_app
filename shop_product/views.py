@@ -1,12 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render, redirect
-from django.views.generic import ListView, View, UpdateView
-from .models import Product, Cart
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import ListView, View, UpdateView, DetailView
+from .models import Product, Cart, Order, OrderItem
 from django.db.models import F, Sum, Avg
 from .forms import AdressForm, AddProduct
-
+from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 
 
 
@@ -17,14 +18,113 @@ class ProductView(ListView):
     paginate_by = 4
 
 
-# def products(request):
-#     queryset = Product.objects.all()
-#     paginator = Paginator(queryset, 8) # Show 25 contacts per page.
-#
-#     page_number = request.GET.get('page')
-#     page_obj = paginator.get_page(page_number)
-#     return render(request, 'shop_product/product.html', {'page_obj':page_obj})
-    # ordering = ['-added_at']
+
+
+class ItemDetailView(DetailView):
+    model = Product
+    template_name = "shop_product/produc_page.html"
+
+@login_required
+def add_to_cart(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+    order_item, created = OrderItem.objects.get_or_create(
+        product=product,
+        user=request.user,
+        ordered=False
+    )
+    order_qs = Order.objects.filter(user=request.user, ordered=False)
+    if order_qs.exists():
+        order = order_qs[0]
+        # check if the order item is in the order
+        if order.items.filter(product__slug=product.slug).exists():
+            order_item.quantity += 1
+            order_item.save()
+            messages.info(request, "This item quantity was updated.")
+            return redirect("shop_product:order-summary")
+        else:
+            order.items.add(order_item)
+            messages.info(request, "This item was added to your cart.")
+            return redirect("shop_product:order-summary")
+    else:
+        order = Order.objects.create(
+            user=request.user,)
+        order.items.add(order_item)
+        messages.info(request, "This item was added to your cart.")
+        return redirect("shop_product:order-summary")
+
+
+class OrderSummaryView(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        try:
+            order = Order.objects.get(user=self.request.user, ordered=False)
+            context = {
+                'object': order
+            }
+            return render(self.request, 'shop_product/cart.html', context)
+        except ObjectDoesNotExist:
+            messages.warning(self.request, "You do not have an active order")
+            return redirect("/")
+
+
+@login_required
+def remove_from_cart(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+    order_qs = Order.objects.filter(
+        user=request.user,
+        ordered=False
+    )
+    if order_qs.exists():
+        order = order_qs[0]
+        # check if the order item is in the order
+        if order.items.filter(product__slug=product.slug).exists():
+            order_item = OrderItem.objects.filter(
+                product=product,
+                user=request.user,
+                ordered=False
+            )[0]
+            order.items.remove(order_item)
+            order_item.delete()
+            messages.info(request, "This item was removed from your cart.")
+            return redirect("shop_product:order-summary")
+        else:
+            messages.info(request, "This item was not in your cart")
+            return redirect("core:product", slug=slug)
+    else:
+        messages.info(request, "You do not have an active order")
+        return redirect("core:product", slug=slug)
+
+
+
+@login_required
+def remove_single_item_from_cart(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+    order_qs = Order.objects.filter(
+        user=request.user,
+        ordered=False
+    )
+    if order_qs.exists():
+        order = order_qs[0]
+        # check if the order item is in the order
+        if order.items.filter(product__slug=product.slug).exists():
+            order_item = OrderItem.objects.filter(
+                product=product,
+                user=request.user,
+                ordered=False
+            )[0]
+            if order_item.quantity > 1:
+                order_item.quantity -= 1
+                order_item.save()
+            else:
+                order.items.remove(order_item)
+            messages.info(request, "This item quantity was updated.")
+            return redirect("shop_product:order-summary")
+        else:
+            messages.info(request, "This item was not in your cart")
+            return redirect("shop_product:product", slug=slug)
+    else:
+        messages.info(request, "You do not have an active order")
+        return redirect("shop_product:product", slug=slug)
+
 
 
 class ProductFilter(ListView):
@@ -63,17 +163,7 @@ def cart(request):
     return render(request, "shop_product/cart.html", context)
 
 
-def add_cart(request, id):
-    product = Product.objects.get(id=id)
-    user = request.user
-    cart = Cart()
-    cart.product = product
-    cart.user = user
-    done = Cart.objects.filter(user=user, product=product)
-    if not done.exists():
-        cart.save()
-        return redirect('shop_product:cart')
-    return redirect('shop_product:cart')
+
 
 
 def cart_delete(request, pk):
@@ -135,3 +225,7 @@ class ProductEdit(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         obj = self.get_object()
         return self.request.user.is_superuser or obj.user == self.request.user
+
+
+def add_cart(request):
+    pass

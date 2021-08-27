@@ -48,7 +48,7 @@
                                aria-expanded="false">Shop</a>
                             <ul class="dropdown-menu">
                                 <li class="nav-item"><a class="nav-link"
-                                                        href="">Shop
+                                                        href="{% url 'shop_product:all_product' %}">Shop
                                     Category</a></li>
                                 <li class="nav-item"><a class="nav-link"
                                                         href="../shop_product/templates/shop_product/single-product.html">Product
@@ -83,38 +83,50 @@
                                aria-haspopup="true"
                                aria-expanded="false">Pages</a>
                             <ul class="dropdown-menu">
+                               {% if user.is_authenticated %}
 
-
+                                <li class="nav-item"><a class="nav-link"
+                                href="{% url 'account:logout' %}">Logout</a>
+                                </li>
+                                {% else %}
+                                
                                 <li class="nav-item"><a class="nav-link" href="{% url 'account:login' %}">Login</a>
                                 </li>
                                 <li class="nav-item"><a class="nav-link"
                                                         href="{% url 'account:register' %}">Register</a>
                                 </li>
-                                <li class="nav-item"><a class="nav-link"
-                                                        href="{% url 'account:logout' %}">Logout</a>
-                                </li>
+                                {% endif %}
                             </ul>
                         </li>
                     </ul>
 
                     <ul class="nav-shop">
-                         
-                        <li class="nav-item"><a class="nav-link" href="{% url 'account:login' %}">Login</a>
-                        </li>
-                        <li class="nav-item"><a class="nav-link"
-                                                href="{% url 'account:register' %}">Register</a>
-                        </li>
-                        <!-- <li class="nav-item">
-{#                            <a href="{% url 'shop_product:cart' %}"><i>#}
-{#                                    class="ti-shopping-cart"> {{ request.user|count_cart }}</i></a>#}
-                        </li> -->
+                             {% if user.is_authenticated %}
+                             <li class="nav-item">
+                                <a class="nav-link" href="{% url 'shop_product:order-summary' %}">Cart
+                                        <span class="badge red z-depth-1 mr-1"> {{ request.user|cart_item_count }} </span>
+                                 <i class="fas fa-shopping-cart"></i>
+                                </a>
+                            </li>
+                             <li class="nav-item"><a class="button button-header"
+                                href="{% url 'account:profil' %}">{{ request.user }}</a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link"
+                                href="{% url 'account:logout' %}">Logout</a>
+                            </li>
+
+                       
+                        {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'shop_product:order-summary' %}">Cart
-                                    <span class="badge red z-depth-1 mr-1"> {{ request.user|cart_item_count }} </span>
-                             <i class="fas fa-shopping-cart"></i>
-                         </a></li>
-                        <li class="nav-item"><a class="button button-header"
-                                                href="{% url 'account:profil' %}">{{ request.user }}</a></li>
+                            <a class="nav-link" href="{% url 'account:login' %}">Login</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'account:register' %}">Register</a>
+                        </li>
+                        {% endif %}
+                        
+                        
                     </ul>
                 </div>
             </div>
@@ -137,24 +149,7 @@
 <main class="site-main">
 
     <!--================ Hero banner start =================-->
-    <section class="hero-banner">
-        <div class="container">
-            <div class="row no-gutters align-items-center pt-60px">
-                <div class="col-5 d-none d-sm-block">
-                    <div class="hero-banner__img">
-                        <img src="{% static 'image/hero-banner.png' %}" style="width: 353px; height: 400px;" class="img-fluid" alt="Erkin">
-                    </div>
-                </div>
-                <div class="col-sm-7 col-lg-6 offset-lg-1 pl-4 pl-md-5 pl-lg-0">
-                    <div class="hero-banner__content">
-                        <h4>Do'kon qiziqarli</h4>
-                        <h1>Premium mahsulotimizni ko'rib chiqing</h1>
-                        <a class="button button-hero" href="#">Hozir ko'rib chiqish</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+
 
     {% block content %}{% endblock %}
     <section class="section-margin calc-60px">
@@ -301,133 +296,4 @@
 </body>
 </html>
 
-<!--====
-{#<nav class="navbar navbar-expand-lg  fixed">#}
-{#    <div class="container">#}
-{#        <a class="navbar-brand text-light" href="{% url 'shop_product:pro' %}">Navbar{% if request.user.is_staff %}#}
-{#            <a class="btn btn-danger" href="/admin/account/user/add/">USER QO"SHISH</a>{% endif %}</a>#}
-{#        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"#}
-{#                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">#}
-{#            <span class="navbar-toggler-icon"></span>#}
-{#        </button>#}
-{##}
-{#        <div class="collapse navbar-collapse" id="navbarSupportedContent">#}
-{#            <ul class="navbar-nav ml-auto">#}
-{#                {% csrf_token %}#}
-{#                {% if user.is_authenticated %}#}
-{#                    <li class="nav-item active mt-1">#}
-{#                        <a class="nav-link text-light"#}
-{#                           href="{% url 'account:profil' %}"><strong>{{ request.user }}</strong></a>#}
-{#                    </li>#}
-{#                    <li class="nav-item active mt-1">#}
-{#                        <a class="nav-link text-light" href="{% url 'account:logout' %}">Logout</a>#}
-{#                    </li>#}
-{#                    <li class="nav-item">#}
-{#                        <a href="{% url 'shop_product:cart' %}"><i#}
-{#                                class="bi bi-cart4 text-light fa-2x">{{ request.user|count_cart }}</i></a>#}
-{#                    </li>#}
-{#                {% else %}#}
-{#                    <li class="nav-item active">#}
-{#                        <a class="nav-link text-light" href="{% url 'account:register' %}">Registr</a>#}
-{#                    </li>#}
-{#                    <li class="nav-item active">#}
-{#                        <a class="nav-link text-light" href="{% url 'account:login' %}">Login</a>#}
-{#                    </li>#}
-{#                {% endif %}#}
-{#            </ul>#}
-{##}
-{#        </div>#}
-{#    </div>#}
-{#</nav>#}
-{#<div class="navbar navbar-dark bg-dark">#}
-{#    <button class="navbar-toggler" type="button" data-toggle="collapse"#}
-{#            data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"#}
-{#            aria-expanded="false" aria-label="Toggle navigation">#}
-{#        <span class="navbar-toggler-icon"></span>#}
-{#    </button>#}
-{#</div>#}
-{#<div class="collapse" id="navbarToggleExternalContent">#}
-{#    <div class="bg-dark p-4">#}
-{#        <nav class="navbar navbar-light" style="background-color: #e3f2fd;">#}
-{##}
-{#            <div class="btn-group">#}
-{#                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"#}
-{#                        aria-expanded="false">Telefonlar#}
-{#                </button>#}
-{#                <div class="dropdown-menu">#}
-{#                    <a class="dropdown-item" href="#">Action</a>#}
-{#                    <a class="dropdown-item" href="#">Another action</a>#}
-{#                    <a class="dropdown-item" href="#">Something else here</a>#}
-{#                    <div class="dropdown-divider"></div>#}
-{#                    <a class="dropdown-item" href="#">Separated link</a>#}
-{#                </div>#}
-{#            </div>#}
-{#            <div class="btn-group">#}
-{#                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"#}
-{#                        aria-expanded="false">Telefon acsesuarlari#}
-{#                </button>#}
-{#                <div class="dropdown-menu">#}
-{#                    <a class="dropdown-item" href="#">Action</a>#}
-{#                    <a class="dropdown-item" href="#">Another action</a>#}
-{#                    <a class="dropdown-item" href="#">Something else here</a>#}
-{#                    <div class="dropdown-divider"></div>#}
-{#                    <a class="dropdown-item" href="#">Separated link</a>#}
-{#                </div>#}
-{#            </div>#}
-{#            <div class="btn-group">#}
-{#                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"#}
-{#                        aria-expanded="false">Telefon acsesuarlari#}
-{#                </button>#}
-{#                <div class="dropdown-menu">#}
-{#                    <a class="dropdown-item" href="#">Action</a>#}
-{#                    <a class="dropdown-item" href="#">Another action</a>#}
-{#                    <a class="dropdown-item" href="#">Something else here</a>#}
-{#                    <div class="dropdown-divider"></div>#}
-{#                    <a class="dropdown-item" href="#">Separated link</a>#}
-{#                </div>#}
-{#            </div>#}
-{#            <div class="btn-group">#}
-{#                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"#}
-{#                        aria-expanded="false">Telefon acsesuarlari#}
-{#                </button>#}
-{#                <div class="dropdown-menu">#}
-{#                    <a class="dropdown-item" href="#">Action</a>#}
-{#                    <a class="dropdown-item" href="#">Another action</a>#}
-{#                    <a class="dropdown-item" href="#">Something else here</a>#}
-{#                    <div class="dropdown-divider"></div>#}
-{#                    <a class="dropdown-item" href="#">Separated link</a>#}
-{#                </div>#}
-{#            </div>#}
-{#            <div class="btn-group">#}
-{#                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"#}
-{#                        aria-expanded="false">Telefon acsesuarlari#}
-{#                </button>#}
-{#                <div class="dropdown-menu">#}
-{#                    <a class="dropdown-item" href="#">Action</a>#}
-{#                    <a class="dropdown-item" href="#">Another action</a>#}
-{#                    <a class="dropdown-item" href="#">Something else here</a>#}
-{#                    <div class="dropdown-divider"></div>#}
-{#                    <a class="dropdown-item" href="#">Separated link</a>#}
-{#                </div>#}
-{#            </div>#}
-{#            <div class="btn-group">#}
-{#                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"#}
-{#                        aria-expanded="false">Telefon acsesuarlari#}
-{#                </button>#}
-{#                <div class="dropdown-menu">#}
-{#                    <a class="dropdown-item" href="#">Action</a>#}
-{#                    <a class="dropdown-item" href="#">Another action</a>#}
-{#                    <a class="dropdown-item" href="#">Something else here</a>#}
-{#                    <div class="dropdown-divider"></div>#}
-{#                    <a class="dropdown-item" href="#">Separated link</a>#}
-{#                </div>#}
-{#            </div>#}
-{#        </nav>#}
-{##}
-{#    </div>#}
-{#</div>#}
 
-
-<footer class="py-1 fixed-bottom">
-    <p class="m-0 text-center text-white">erkinnajimov90@gmail.com 2021</p>
-</footer>

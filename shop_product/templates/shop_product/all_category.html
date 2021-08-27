@@ -1,18 +1,15 @@
 {% extends 'layout.html' %}
 
-{% load category_filter %}
-
-
-
 {% block content %}
     <section class="blog-banner-area" id="category">
         <div class="container h-100">
             <div class="blog-banner">
                 <div class="text-center">
-                    <h1>Maxsulotlarni categoriyalar asosida xarid qiling</h1>
+                    <h1>Barcha maxsulotlar shuyerda <br> categoryalardan tanlang</h1>
                     <nav aria-label="breadcrumb" class="banner-breadcrumb">
                         <ol class="breadcrumb">
-                            <h5 class="breadcrumb-item"><a href="{% url 'shop_product:pro' %}"><strong>Home</strong></a></h5>
+                            <h5 class="breadcrumb-item"><a href="{% url 'shop_product:pro' %}"><strong>Home</strong></a>
+                            </h5>
                         </ol>
                     </nav>
                 </div>
@@ -24,11 +21,11 @@
             <div class="row">
                 <div class="col-xl-3 col-lg-4 col-md-5">
                     <div class="sidebar-categories">
-                        <div class="head text-center">Brand</div>
+                        <div class="head">Maxsulot Categoriyalari</div>
                         <div class="main-categories">
-                            {% for re in brand_all %}
+                            {% for re in cat %}
                                 <ul>
-                                    <a href="{% url "shop_product:brand" re.id %}"
+                                    <a href="{% url 'shop_product:category_by_id' re.id %}"
                                        class="button button-paypal text-center mt-3">{{ re.name }}</a>
                                 </ul>
                             {% endfor %}
@@ -38,11 +35,11 @@
                 <div class="col-xl-9 col-lg-8 col-md-7">
                     <section class="lattest-product-area pb-40 category-list">
                         <div class="row">
-                            {% for rm in category_f %}
+                            {% for r in all_product %}
                                 <div class="col-md-6 col-lg-4">
                                     <div class="card text-center card-product">
                                         <div class="card-product__img">
-                                            <img class="card-img" src="{{ rm.image.url }}" alt="">
+                                            <img class="card-img" src="{{ r.image.url }}" alt="">
                                             <ul class="card-product__imgOverlay">
                                                 <li>
                                                     <button><i class="ti-search"></i></button>
@@ -56,9 +53,25 @@
                                             </ul>
                                         </div>
                                         <div class="card-body">
-                                            <p>{{ rm.category }}</p>
+                                            <p>{{ r.category }}</p>
                                             <h4 class="card-product__title"><a href="#">Quartz Belt Watch</a></h4>
-                                            <p class="card-product__price">$ {{ rm.price }}</p>
+                                            <th>
+                                                <i class="
+                                        {% if product.rating < 0.5 %}far fa-star {% elif product.rating == 0.5 %} fa fa-star-half-alt {% else %} fa fa-star {% endif %} "
+                                                   aria-hidden="true" style="color: yellow"></i>
+                                                <i class="
+                                         {% if product.rating < 1.5 %}far fa-star {% elif product.rating == 1.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
+                                                   aria-hidden="true" style="color: yellow"></i>
+                                                <i class="
+                                        {% if product.rating < 2.5 %}far fa-star{% elif product.rating == 2.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
+                                                   aria-hidden="true" style="color: yellow"></i>
+                                                <i class="
+                                         {% if product.rating < 3.5 %}far fa-star{% elif product.rating == 3.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
+                                                   aria-hidden="true" style="color: yellow"></i>
+
+
+                                            </th>
+                                            <p class="card-product__price">$ {{ r.price }}</p>
                                         </div>
                                     </div>
                                 </div>

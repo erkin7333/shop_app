@@ -1,14 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, View, UpdateView, DetailView
-from .models import Product, Cart, Order, OrderItem
+from .models import Product, Cart, Order, OrderItem, Brand, Category
 from django.db.models import F, Sum, Avg
 from .forms import AdressForm, AddProduct
 from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-
 
 
 class ProductView(ListView):
@@ -18,11 +17,10 @@ class ProductView(ListView):
     paginate_by = 4
 
 
-
-
 class ItemDetailView(DetailView):
     model = Product
     template_name = "shop_product/produc_page.html"
+
 
 @login_required
 def add_to_cart(request, slug):
@@ -47,7 +45,7 @@ def add_to_cart(request, slug):
             return redirect("shop_product:order-summary")
     else:
         order = Order.objects.create(
-            user=request.user,)
+            user=request.user, )
         order.items.add(order_item)
         messages.info(request, "This item was added to your cart.")
         return redirect("shop_product:order-summary")
@@ -94,7 +92,6 @@ def remove_from_cart(request, slug):
         return redirect("core:product", slug=slug)
 
 
-
 @login_required
 def remove_single_item_from_cart(request, slug):
     product = get_object_or_404(Product, slug=slug)
@@ -124,7 +121,6 @@ def remove_single_item_from_cart(request, slug):
     else:
         messages.info(request, "You do not have an active order")
         return redirect("shop_product:product", slug=slug)
-
 
 
 class ProductFilter(ListView):
@@ -161,9 +157,6 @@ def cart(request):
     }
     context['cart_sum'] = cart_sum['product__price__sum']
     return render(request, "shop_product/cart.html", context)
-
-
-
 
 
 def cart_delete(request, pk):
@@ -212,8 +205,6 @@ def add_product(request):
 #
 #     return render(request, 'shop_product/categorya.html', {"products":products})
 #
-def pro_category(request):
-    return render(request, 'shop_product/categorya.html', )
 
 
 class ProductEdit(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -229,3 +220,33 @@ class ProductEdit(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 def add_cart(request):
     pass
+
+
+def category_by_id(request, pk):
+    category_f = Product.objects.filter(category_id=pk)
+    brand_all = Brand.objects.all()
+    context = {
+        'category_f': category_f,
+        'brand_all': brand_all,
+    }
+    return render(request, 'shop_product/categorya.html', context)
+
+
+def product_all(request, ):
+    cat = Category.objects.all()
+    all_product = Product.objects.all()
+    context = {
+        'cat': cat,
+        "all_product": all_product,
+    }
+    return render(request, 'shop_product/all_category.html', context)
+
+
+def brand_by_id(request, pk):
+    brand_f = Product.objects.filter(brand_id=pk)
+    brand_all = Brand.objects.all()
+    context = {
+        'brand_f': brand_f,
+        'brand_all': brand_all,
+    }
+    return render(request, "shop_product/brand.html", context)

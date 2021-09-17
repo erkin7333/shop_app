@@ -1,13 +1,14 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, View, UpdateView, DetailView
-from .models import Product, Cart, Order, OrderItem, Brand, Category
+from django.views.generic import ListView, View, UpdateView, DetailView, CreateView, TemplateView
+from .models import Product, Cart, Order, Brand, Category, CartProduct, ShippingAddress
 from django.db.models import F, Sum, Avg
-from .forms import AdressForm, AddProduct
+from .forms import AddProduct, ShippingAddressForm
 from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.urls import reverse_lazy
 
 
 class ProductView(ListView):
@@ -17,110 +18,132 @@ class ProductView(ListView):
     paginate_by = 4
 
 
-class ItemDetailView(DetailView):
-    model = Product
+class ProductDetailView(TemplateView):
     template_name = "shop_product/produc_page.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        url_slug = self.kwargs['slug']
+        prod = Product.objects.get(slug=url_slug)
+        prod.view_count += 1
+        prod.save()
+        context['product'] = prod
+        return context
 
 
-@login_required
-def add_to_cart(request, slug):
-    product = get_object_or_404(Product, slug=slug)
-    order_item, created = OrderItem.objects.get_or_create(
-        product=product,
-        user=request.user,
-        ordered=False
-    )
-    order_qs = Order.objects.filter(user=request.user, ordered=False)
-    if order_qs.exists():
-        order = order_qs[0]
-        # check if the order item is in the order
-        if order.items.filter(product__slug=product.slug).exists():
-            order_item.quantity += 1
-            order_item.save()
-            messages.info(request, "This item quantity was updated.")
-            return redirect("shop_product:order-summary")
-        else:
-            order.items.add(order_item)
-            messages.info(request, "This item was added to your cart.")
-            return redirect("shop_product:order-summary")
-    else:
-        order = Order.objects.create(
-            user=request.user, )
-        order.items.add(order_item)
-        messages.info(request, "This item was added to your cart.")
-        return redirect("shop_product:order-summary")
+class AddToCartView(View):
+    def get(self, request, pro_id):
+        product_id = pro_id
+        # mahsulotni olish
 
-
-class OrderSummaryView(LoginRequiredMixin, View):
-    def get(self, *args, **kwargs):
-        try:
-            order = Order.objects.get(user=self.request.user, ordered=False)
-            context = {
-                'object': order
-            }
-            return render(self.request, 'shop_product/cart.html', context)
-        except ObjectDoesNotExist:
-            messages.warning(self.request, "You do not have an active order")
-            return redirect("/")
-
-
-@login_required
-def remove_from_cart(request, slug):
-    product = get_object_or_404(Product, slug=slug)
-    order_qs = Order.objects.filter(
-        user=request.user,
-        ordered=False
-    )
-    if order_qs.exists():
-        order = order_qs[0]
-        # check if the order item is in the order
-        if order.items.filter(product__slug=product.slug).exists():
-            order_item = OrderItem.objects.filter(
-                product=product,
-                user=request.user,
-                ordered=False
-            )[0]
-            order.items.remove(order_item)
-            order_item.delete()
-            messages.info(request, "This item was removed from your cart.")
-            return redirect("shop_product:order-summary")
-        else:
-            messages.info(request, "This item was not in your cart")
-            return redirect("core:product", slug=slug)
-    else:
-        messages.info(request, "You do not have an active order")
-        return redirect("core:product", slug=slug)
-
-
-@login_required
-def remove_single_item_from_cart(request, slug):
-    product = get_object_or_404(Product, slug=slug)
-    order_qs = Order.objects.filter(
-        user=request.user,
-        ordered=False
-    )
-    if order_qs.exists():
-        order = order_qs[0]
-        # check if the order item is in the order
-        if order.items.filter(product__slug=product.slug).exists():
-            order_item = OrderItem.objects.filter(
-                product=product,
-                user=request.user,
-                ordered=False
-            )[0]
-            if order_item.quantity > 1:
-                order_item.quantity -= 1
-                order_item.save()
+        product_obj = Product.objects.get(id=product_id)
+    #     # Maxsulot mavjudligini tekshirish
+        cart_id = self.request.session.get('cart_id', None)
+        if cart_id:
+            cart_obj = Cart.objects.get(id=cart_id)
+            this_product_in_cart = cart_obj.cartproduct_set.filter(product=product_obj)
+            if this_product_in_cart.exists():
+                cartproduct = this_product_in_cart.last()
+                cartproduct.quantity += 1
+                cartproduct.subtotal += product_obj.selling_price
+                cart_obj.total += product_obj.selling_price
+                cart_obj.save()
             else:
-                order.items.remove(order_item)
-            messages.info(request, "This item quantity was updated.")
-            return redirect("shop_product:order-summary")
+                cartproduct = CartProduct.objects.create(cart=cart_obj, product=product_obj, rate=product_obj.selling_price,
+                                                         quantity=1, subtotal=product_obj.selling_price)
+
+                cart_obj.total += product_obj.selling_price
+                cart_obj.save()
         else:
-            messages.info(request, "This item was not in your cart")
-            return redirect("shop_product:product", slug=slug)
-    else:
-        messages.info(request, "You do not have an active order")
-        return redirect("shop_product:product", slug=slug)
+            cart_obj = Cart.objects.create(total=0)
+            self.request.session['cart_id'] = cart_obj.id
+            cartproduct = CartProduct.objects.create(cart=cart_obj, product=product_obj,
+                                                     rate=product_obj.selling_price, subtotal=product_obj.selling_price, quantity=1)
+            cart_obj.total += product_obj.selling_price
+            cart_obj.save()
+        return redirect('shop_product:mycart')
+
+class MyCartView(TemplateView):
+    template_name = "shop_product/cart.html"
+    def get_context_data(self, **kwargs):
+        context = super(MyCartView, self).get_context_data(**kwargs)
+        cart_id = self.request.session.get("cart_id", None)
+        if cart_id:
+            cartt = Cart.objects.get(id=cart_id)
+        else:
+            cartt = None
+        context['cartt'] = cartt
+        return context
+
+class AllDeleteView(View):
+    def get(self, request, *args, **kwargs):
+        cart_id = request.session.get('cart_id', None)
+        if cart_id:
+            cart = Cart.objects.get(id=cart_id)
+            cart.cartproduct_set.all().delete()
+            cart.total = 0
+            cart.save()
+        return redirect('shop_product:mycart')
+
+class ChekoutView(CreateView):
+    template_name = 'shop_product/chekout.html'
+    form_class = ShippingAddressForm
+    success_url = reverse_lazy("shop_product:myorder")
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart_id = self.request.session.get("cart_id", None)
+        if cart_id:
+            cart_obj = Cart.objects.get(id=cart_id)
+        else:
+            cart_obj = None
+        context['cart'] = cart_obj
+        return context
+    def form_valid(self, form):
+        cart_id = self.request.session.get("cart_id")
+        if cart_id:
+            cart_obj = Cart.objects.get(id=cart_id)
+            user = self.request.user
+            form.instance.user = user
+            form.instance.cart = cart_obj
+            form.instance.subtotal = cart_obj.total
+            form.instance.discount = 0
+            form.instance.total = cart_obj.total
+            form.instance.order_status = "Buyurtma qabul qilindi"
+            del self.request.session['cart_id']
+        else:
+            return redirect('shop_product:myorder')
+        return super().form_valid(form)
+
+class OrderView(TemplateView):
+    template_name = 'shop_product/order.html'
+
+
+class ManagerCartView(View):
+    def get(self, request, *args, **kwargs):
+        cp_id = self.kwargs['cp_id']
+        action = request.GET.get('action')
+        cp_obj = CartProduct.objects.get(id=cp_id)
+        cart_obj = cp_obj.cart
+        if action == "inc":
+            cp_obj.quantity += 1
+            cp_obj.subtotal += cp_obj.rate
+            cp_obj.save()
+            cart_obj.total += cp_obj.rate
+            cart_obj.save()
+        elif action == "dcr":
+            cp_obj.quantity -= 1
+            cp_obj.subtotal -= cp_obj.rate
+            cp_obj.save()
+            cart_obj.total -= cp_obj.rate
+            cart_obj.save()
+            if cp_obj.quantity == 0:
+                cp_obj.delete()
+        elif action == "rmv":
+            cart_obj.total -= cp_obj.subtotal
+            cart_obj.save()
+            cp_obj.delete()
+        return redirect('shop_product:mycart')
+
+
 
 
 class ProductFilter(ListView):
@@ -135,77 +158,12 @@ class ProductFilter(ListView):
         return result
 
 
-class ProView(View):
-
-    def get(self, request, id, *args, **kwargs):
-        product = Product.objects.get(id=id)
-        return render(request, "shop_product/produc_page.html", {
-            "product": product
-        })
-
-
-def cart(request):
-    carts = None
-    if request.user.is_superuser:
-        carts = Cart.objects.all()
-        cart_sum = Cart.objects.filter(user=request.user).aggregate(Sum("product__price"))
-    else:
-        cart_sum = Cart.objects.filter(user=request.user).aggregate(Sum("product__price"))
-        carts = Cart.objects.filter(user=request.user)
-    context = {
-        'carts': carts,
-    }
-    context['cart_sum'] = cart_sum['product__price__sum']
-    return render(request, "shop_product/cart.html", context)
-
-
-def cart_delete(request, pk):
-    obj = Cart.objects.get(pk=pk)
-    obj.delete()
-    return redirect('shop_product:cart')
-
-
-def adress(request):
-    qwerty = AdressForm()
-    context = {
-        'qwerty': qwerty
-    }
-    return render(request, 'shop_product/adress.html', context)
-
-
-def adress_save(request):
-    if request.method == 'POST':
-        form = AdressForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("shop_product:save_adress")
-        return render(request, 'shop_product/adress.html')
-
-
 def add_product(request):
     form = AddProduct()
     context = {
         'form': form
     }
     return render(request, "shop_product/add_product.html", context)
-
-
-# def addproduct(request):
-#     if request.method == 'POST':
-#         form = AddProduct()
-#         context = {
-#             'form': form
-#         }
-#         return render(request, 'shop_product/add_product.html', context)
-
-
-#
-# def pro_category(request):
-#     products = Product.objects.filter(brand__icontains='Apple')
-#
-#     return render(request, 'shop_product/categorya.html', {"products":products})
-#
-
 
 class ProductEdit(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Product
@@ -217,9 +175,6 @@ class ProductEdit(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         obj = self.get_object()
         return self.request.user.is_superuser or obj.user == self.request.user
 
-
-def add_cart(request):
-    pass
 
 
 def category_by_id(request, pk):

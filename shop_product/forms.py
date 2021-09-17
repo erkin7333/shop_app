@@ -1,14 +1,15 @@
 from django import forms
-from .models import ShoppingAddress, Product
+from .models import ShippingAddress, Product, Order
 
+# class ChekoutForm(forms.ModelForm):
+#     class Meta:
+#         model = Order
+#         fields = ['first_name', 'last_name', 'phone', 'email', 'subtotal', 'dicount','total', 'order_status']
 
-
-class AdressForm(forms.ModelForm):
+class ShippingAddressForm(forms.ModelForm):
     class Meta:
-        model = ShoppingAddress
-        fields = '__all__'
-
-
+        model = ShippingAddress
+        fields = ['city', 'district', 'street', 'phone', 'email', 'house_number']
 class AddProduct(forms.ModelForm):
     class Meta:
         model = Product

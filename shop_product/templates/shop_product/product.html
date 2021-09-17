@@ -1,14 +1,16 @@
 {% extends 'layout.html' %}
 {% load static %}
-
+{% load humanize %}
 
 {% block content %}
-<section class="hero-banner">
+
+    <section class="hero-banner">
         <div class="container">
             <div class="row no-gutters align-items-center pt-60px">
                 <div class="col-5 d-none d-sm-block">
                     <div class="hero-banner__img">
-                        <img src="{% static 'image/hero-banner.png' %}" style="width: 353px; height: 400px;" class="img-fluid" alt="Erkin">
+                        <img src="{% static 'image/hero-banner.png' %}" style="width: 353px; height: 400px;"
+                             class="img-fluid" alt="Erkin">
                     </div>
                 </div>
                 <div class="col-sm-7 col-lg-6 offset-lg-1 pl-4 pl-md-5 pl-lg-0">
@@ -21,6 +23,39 @@
             </div>
         </div>
     </section>
+    <main class="site-main">
+    <section class="section-margin mt-0">
+        <div class="owl-carousel owl-theme hero-carousel">
+            <div class="hero-carousel__slide">
+                <img src="{% static 'image/hero-slide2.png' %}" alt="" class="img-fluid">
+                <a href="#" class="hero-carousel__slideOverlay">
+                    <h3>Wireless Headphone</h3>
+                    <p>Accessories Item</p>
+                </a>
+            </div>
+            <div class="hero-carousel__slide">
+                <img src="{% static 'image/hero-slide1.png' %}" alt="" class="img-fluid">
+                <a href="#" class="hero-carousel__slideOverlay">
+                    <h3>Shoes</h3>
+                    <p>Accessories Item</p>
+                </a>
+            </div>
+            <div class="hero-carousel__slide">
+                <img src="{% static 'image/hero-slide2.png' %}" alt="" class="img-fluid">
+                <a href="#" class="hero-carousel__slideOverlay">
+                    <h3>Wireless Headphone</h3>
+                    <p>Accessories Item</p>
+                </a>
+            </div>
+            <div class="hero-carousel__slide">
+                <img src="{% static 'image/hero-slide1.png' %}" alt="" class="img-fluid">
+                <a href="#" class="hero-carousel__slideOverlay">
+                    <h3>Shoes</h3>
+                    <p>Accessories Item</p>
+                </a>
+            </div>
+        </div>
+    </section>
     <section class="section-margin calc-60px">
         <div class="container">
             <div class="section-intro pb-60px">
@@ -30,14 +65,15 @@
             <div class="row">
                 {% for product in products %}
                     <div class="col-md-6 col-lg-4 col-xl-3">
-                        <div class="card text-center card-product">
-                            <div class="card-product__img">
+                        <div class="card text-center card-product border">
+                            <div class="card-product__img ">
                                 <img class="card-img" src="{{ product.image.url }}" alt="">
                                 <ul class="card-product__imgOverlay">
-<!--                                    <li>-->
-<!--                                        <button><i class="ti-shopping-cart"-->
-<!--                                                   href="{% url 'shop_product:add_cart' product.id %}"></i></button>-->
-<!--                                    </li>-->
+                                    <li>
+                                        <button>
+                                            <i class="ti-shopping-cart"></i>
+                                        </button>
+                                    </li>
                                     <li>
                                         <button><i class="ti-heart"></i></button>
                                     </li>
@@ -46,8 +82,9 @@
                             <div class="card-body">
                                 <p>{{ product.name }}</p>
                                 <p>{{ product.brand }}</p>
+                                <p><i class="bi bi-eye-fill"></i> {{ product.view_count }}</p>
                                 <h4 class="card-product__title"><a
-                                        href="{{ product.get_absolute_url }}">Ko'rish
+                                        href="{% url 'shop_product:pro_detail' product.slug %}">Ko'rish
                                 </a></h4>
                                 <i class="
                                         {% if product.rating < 0.5 %}far fa-star {% elif product.rating == 0.5 %} fa fa-star-half-alt {% else %} fa fa-star {% endif %} "
@@ -61,10 +98,11 @@
                                 <i class="
                                          {% if product.rating < 3.5 %}far fa-star{% elif product.rating == 3.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
                                    aria-hidden="true" style="color: yellow"></i>
-                                <p class="card-product__price"><strong>$</strong> {{ product.price }}</p>
+                                <p class="card-product__price text-danger"><strong>$</strong> {{ product.selling_price|intcomma }}</p>
                                 {% if user.is_authenticated and product.user_id == user.id or user.is_staff %}
-                            <a class="" href="{% url 'shop_product:product_edit' product.id %}"><small><i>Edit</i></small></a>
-                              {% endif %}
+                                    <a class=""
+                                       href="{% url 'shop_product:product_edit' product.id %}"><small><i>Edit</i></small></a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

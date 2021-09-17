@@ -1,0 +1,62 @@
+{% extends 'layout.html' %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h3 class="text-center">Savatdagi narsalar</h3>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Category</th>
+                        <th>Brand</th>
+                        <th>Name</th>
+                        <th>Rate</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for rt in cart.cartproduct_set.all %}
+                        <tr>
+                            <td>{{ rt.product }}</td>
+                            <td>{{ rt.product.category }}</td>
+                            <td>{{ rt.product.brand }}</td>
+                            <td>{{ rt.product.name }}</td>
+                            <td>{{ rt.rate|intcomma }}</td>
+                            <td>{{ rt.quantity }}</td>
+                            <td>{{ rt.subtotal|intcomma }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <th>
+                            <a href="{% url 'shop_product:mycart' %}" class="btn btn-primary">Yangilash</a>
+                        </th>
+
+                        <th colspan="5" class="text-right">Jami summa:</th>
+                        <th>{{ cart.total|intcomma }}</th>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <h3 class="ti-agenda text-center">Shipping Address</h3>
+                <form action="" method="POST">
+                    <div class="card ml-auto" style="width: 28rem;">
+                        <ul class="list-group list-group-flush text-center">
+                            {% csrf_token%}
+                            {{ form }}
+                        </ul>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-block btn-primary">Saqlash</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

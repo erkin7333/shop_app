@@ -113,8 +113,16 @@ class ChekoutView(CreateView):
             return redirect('shop_product:myorder')
         return super().form_valid(form)
 
-class OrderView(TemplateView):
-    template_name = 'shop_product/order.html'
+
+
+# class OrderView(TemplateView):
+#     template_name = 'shop_product/order.html'
+
+def orderview(request):
+    carttt = Cart.objects.all()
+    return render(request, 'shop_product/order.html', {"carttt": carttt})
+
+
 
 
 class ManagerCartView(View):

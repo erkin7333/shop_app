@@ -18,7 +18,7 @@ urlpatterns = [
 
     path('chekout/', ChekoutView.as_view(), name='chekout'),
 
-    path('order/', OrderView.as_view(), name='myorder'),
+    path('order/', orderview, name='myorder'),
 
     path('add_pro/', add_product, name='add_pro'),
 

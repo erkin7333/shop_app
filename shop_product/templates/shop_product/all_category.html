@@ -16,6 +16,7 @@
             </div>
         </div>
     </section>
+
     <section class="section-margin--small mb-5">
         <div class="container">
             <div class="row">
@@ -33,6 +34,16 @@
                     </div>
                 </div>
                 <div class="col-xl-9 col-lg-8 col-md-7">
+                    <div class="filter-bar d-flex flex-wrap justify-content-center">
+                        <div>
+                            <div class="input-group filter-bar-search ">
+                                <input type="text" placeholder="Search">
+                                <div class="input-group-append">
+                                    <button type="button"><i class="ti-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <section class="lattest-product-area pb-40 category-list">
                         <div class="row">
                             {% for r in all_product %}
@@ -57,21 +68,21 @@
                                             <h4 class="card-product__title"><a href="#">Quartz Belt Watch</a></h4>
                                             <th>
                                                 <i class="
-                                        {% if product.rating < 0.5 %}far fa-star {% elif product.rating == 0.5 %} fa fa-star-half-alt {% else %} fa fa-star {% endif %} "
+                                        {% if r.rating < 0.5 %}far fa-star {% elif r.rating == 0.5 %} fa fa-star-half-alt {% else %} fa fa-star {% endif %} "
                                                    aria-hidden="true" style="color: yellow"></i>
                                                 <i class="
-                                         {% if product.rating < 1.5 %}far fa-star {% elif product.rating == 1.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
+                                         {% if r.rating < 1.5 %}far fa-star {% elif r.rating == 1.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
                                                    aria-hidden="true" style="color: yellow"></i>
                                                 <i class="
-                                        {% if product.rating < 2.5 %}far fa-star{% elif product.rating == 2.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
+                                        {% if r.rating < 2.5 %}far fa-star{% elif r.rating == 2.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
                                                    aria-hidden="true" style="color: yellow"></i>
                                                 <i class="
-                                         {% if product.rating < 3.5 %}far fa-star{% elif product.rating == 3.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
+                                         {% if r.rating < 3.5 %}far fa-star{% elif r.rating == 3.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
                                                    aria-hidden="true" style="color: yellow"></i>
 
 
                                             </th>
-                                            <p class="card-product__price">$ {{ r.price }}</p>
+                                            <p class="card-product__price">$ {{ r.selling_price }}</p>
                                         </div>
                                     </div>
                                 </div>

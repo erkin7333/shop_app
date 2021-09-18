@@ -106,7 +106,9 @@ class CartProduct(models.Model):
         return "Cart" + str(self.cart_id) + "CartProduct" + str(self.id)
 
 class ShippingAddress(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    first_name = models.CharField(max_length=250, null=True, blank=True)
+    last_name = models.CharField(max_length=250, null=True, blank=True)
     city = models.CharField(max_length=200, blank=True, null=True, verbose_name="Shahar / Viloyat")
     district = models.CharField(max_length=200, blank=True, null=True, verbose_name="Tuman")
     street = models.CharField(max_length=200, blank=True, null=True, verbose_name="Ko'cha")
@@ -126,13 +128,9 @@ ORDER_STATUS = (
 )
 
 class Order(models.Model):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    first_name = models.CharField(max_length=250, null=True, blank=True)
-    last_name = models.CharField(max_length=250, null=True, blank=True)
-    shipping_address = models.ForeignKey(ShippingAddress, on_delete=models.CASCADE, blank=True, null=True)
     dicount = models.PositiveIntegerField()
     total = models.PositiveIntegerField()
-    order_status = models.CharField(max_length=250, choices=ORDER_STATUS)
+    order_status = models.CharField(max_length=250, default='On the way', choices=ORDER_STATUS)
     createdAt = models.DateTimeField(auto_now_add=True)
 

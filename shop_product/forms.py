@@ -9,7 +9,7 @@ from .models import ShippingAddress, Product, Order
 class ShippingAddressForm(forms.ModelForm):
     class Meta:
         model = ShippingAddress
-        fields = ['city', 'district', 'street', 'phone', 'email', 'house_number']
+        fields = ['first_name', "last_name", 'city', 'district', 'street', 'phone', 'email', 'house_number']
 class AddProduct(forms.ModelForm):
     class Meta:
         model = Product

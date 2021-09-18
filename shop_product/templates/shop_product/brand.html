@@ -8,7 +8,8 @@
                     <h1>Maxsulotlarni brendlar <br> asosida xarid qiling</h1>
                     <nav aria-label="breadcrumb" class="banner-breadcrumb">
                         <ol class="breadcrumb">
-                            <h5 class="breadcrumb-item"><a href="{% url 'shop_product:pro' %}"><strong>Home</strong></a></h5>
+                            <h5 class="breadcrumb-item"><a href="{% url 'shop_product:pro' %}"><strong>Home</strong></a>
+                            </h5>
                         </ol>
                     </nav>
                 </div>
@@ -32,6 +33,16 @@
                     </div>
                 </div>
                 <div class="col-xl-9 col-lg-8 col-md-7 mt-5">
+                    <div class="filter-bar d-flex flex-wrap justify-content-center">
+                        <div>
+                            <div class="input-group filter-bar-search ">
+                                <input type="text" placeholder="Search">
+                                <div class="input-group-append">
+                                    <button type="button"><i class="ti-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <section class="lattest-product-area pb-40 category-list">
                         <div class="row">
                             {% for brend in brand_f %}

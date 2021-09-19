@@ -16,9 +16,9 @@ class ProductView(ListView):
     template_name = "shop_product/product.html"
     context_object_name = 'products'
     paginate_by = 4
+    
 
-
-class ProductDetailView(TemplateView):
+class ProductDetailView(LoginRequiredMixin,TemplateView):
     template_name = "shop_product/produc_page.html"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -30,7 +30,7 @@ class ProductDetailView(TemplateView):
         return context
 
 
-class AddToCartView(View):
+class AddToCartView(LoginRequiredMixin,View):
     def get(self, request, pro_id):
         product_id = pro_id
         # mahsulotni olish
@@ -60,6 +60,8 @@ class AddToCartView(View):
                                                      rate=product_obj.selling_price, subtotal=product_obj.selling_price, quantity=1)
             cart_obj.total += product_obj.selling_price
             cart_obj.save()
+
+        messages.info(request, "This item was added to your cart.")
         return redirect('shop_product:mycart')
 
 class MyCartView(TemplateView):
@@ -82,6 +84,7 @@ class AllDeleteView(View):
             cart.cartproduct_set.all().delete()
             cart.total = 0
             cart.save()
+            messages.info(request, "This items was cleaned from your cart.")
         return redirect('shop_product:mycart')
 
 class ChekoutView(CreateView):
@@ -128,12 +131,14 @@ class ManagerCartView(View):
             cp_obj.subtotal += cp_obj.rate
             cp_obj.save()
             cart_obj.total += cp_obj.rate
+            messages.info(request, "This item quantity was updated.")
             cart_obj.save()
         elif action == "dcr":
             cp_obj.quantity -= 1
             cp_obj.subtotal -= cp_obj.rate
             cp_obj.save()
             cart_obj.total -= cp_obj.rate
+            messages.info(request, "This item was removed from your cart.")
             cart_obj.save()
             if cp_obj.quantity == 0:
                 cp_obj.delete()
@@ -141,6 +146,7 @@ class ManagerCartView(View):
             cart_obj.total -= cp_obj.subtotal
             cart_obj.save()
             cp_obj.delete()
+            messages.info(request, "This item was deleted from your cart.")
         return redirect('shop_product:mycart')
 
 
@@ -164,6 +170,8 @@ def add_product(request):
         'form': form
     }
     return render(request, "shop_product/add_product.html", context)
+
+    
 
 class ProductEdit(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Product

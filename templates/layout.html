@@ -104,7 +104,7 @@
                         {% if user.is_authenticated %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'shop_product:mycart' %}">Cart
-                                    <span class="badge red z-depth-1 mr-1"></span>
+                                    <span class="badge red z-depth-1 mr-1"> {{ request.user|cart_item_count }} </span>
                                     <i class="fas fa-shopping-cart"></i>
                                 </a>
                             </li>
@@ -132,6 +132,9 @@
     </div>
 </header>
 
+
+
+
 <!--================ Hero banner start =================-->
 
 <!--================ Hero Carousel start =================-->
@@ -154,42 +157,7 @@
 
 
     {% block content %}{% endblock %}
-{#    <section class="section-margin calc-60px">#}
-{#        <div class="container">#}
-{#            <div class="section-intro pb-60px">#}
-{#                <p>Bozorda mashhur mahsulot</p>#}
-{#                <h2>Eng yaxshisi <span class="section-intro__style">Sotuvchilar</span></h2>#}
-{#            </div>#}
-{#            <div class="owl-carousel owl-theme" id="bestSellerCarousel">#}
-{#                <div class="card text-center card-product">#}
-{#                    {% for re in result %}#}
-{#                        <div class="card-product__img">#}
-{#                            <img class="img-fluid" src="{{ re.image.url }}" alt="">#}
-{#                            <ul class="card-product__imgOverlay">#}
-{#                                <li>#}
-{#                                    <button><i class="ti-search"></i></button>#}
-{#                                </li>#}
-{#                                <li>#}
-{#                                    <button><i class="ti-shopping-cart"></i></button>#}
-{#                                </li>#}
-{#                                <li>#}
-{#                                    <button><i class="ti-heart"></i></button>#}
-{#                                </li>#}
-{#                            </ul>#}
-{#                        </div>#}
-{#                        <div class="card-body">#}
-{#                            <p>{{ re.price }}</p>#}
-{#                            <h4 class="card-product__title"><a#}
-{#                                    href="../shop_product/templates/shop_product/single-product.html">{{ filter_product }}#}
-{#                                Watch</a>#}
-{#                            </h4>#}
-{#                            <p class="card-product__price">{{ re.price }}</p>#}
-{#                        </div>#}
-{#                    {% endfor %}#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#    </section>#}
+
 {#    <!-- ================ Best Selling item  carousel end ================= -->#}
 
     <!-- ================ Blog section start ================= -->

@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
-
+from django.contrib import messages
 User = get_user_model()
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
@@ -31,7 +31,9 @@ class UserRegister(View):
             user = User(**data)
             user.password = make_password(data['password'])
             user.save()
+            messages.info(request, "Registratsiyadan ottingiz tizimga kirish uchun 'Tizimga kirishni' bosing ")
             return redirect('account:login')
+        
         return render(request, 'account/register.html', {"form": form})
 
 
@@ -44,14 +46,16 @@ def user_login(request):
                                 password=form.cleaned_data['password'])
             if user is not None:
                 login(request, user)
+                messages.info(request, "Royhatdan otdingiz.")
                 return redirect('shop_product:pro')
             form.add_error('password', "Username va/yoki parol noto'g'ri. ")
-
+        
     return render(request, 'account/login.html', {'form': form})
 
 
 def user_logout(request):
     logout(request)
+    messages.info(request, "Tizimdan chiqdinggiz.")
     return redirect('shop_product:pro')
 
 

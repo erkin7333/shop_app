@@ -1,9 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, View, UpdateView, DetailView, CreateView, TemplateView
+from django.views.generic import ListView, View, UpdateView, DetailView, CreateView, TemplateView, DeleteView
 from .models import Product, Cart, Order, Brand, Category, CartProduct, ShippingAddress
 from django.db.models import F, Sum, Avg
-from .forms import AddProduct, ShippingAddressForm
+from .forms import AddProduct, SearchForms, ShippingAddressForm
 from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
@@ -116,8 +116,16 @@ class ChekoutView(CreateView):
             return redirect('shop_product:myorder')
         return super().form_valid(form)
 
-class OrderView(TemplateView):
-    template_name = 'shop_product/order.html'
+
+
+# class OrderView(TemplateView):
+#     template_name = 'shop_product/order.html'
+
+def orderview(request):
+    carttt = Cart.objects.all()
+    return render(request, 'shop_product/order.html', {"carttt": carttt})
+
+
 
 
 class ManagerCartView(View):
@@ -172,7 +180,9 @@ def add_product(request):
     return render(request, "shop_product/add_product.html", context)
 
     
-
+"""
+<< Edit product >>
+"""
 class ProductEdit(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Product
     template_name = "shop_product/product_edit.html"
@@ -185,9 +195,11 @@ class ProductEdit(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
 
+
 def category_by_id(request, pk):
+    print(pk)
     category_f = Product.objects.filter(category_id=pk)
-    brand_all = Brand.objects.all()
+    brand_all = Brand.objects.filter(category=pk)
     context = {
         'category_f': category_f,
         'brand_all': brand_all,
@@ -195,7 +207,7 @@ def category_by_id(request, pk):
     return render(request, 'shop_product/categorya.html', context)
 
 
-def product_all(request, ):
+def product_all(request):
     cat = Category.objects.all()
     all_product = Product.objects.all()
     context = {
@@ -207,9 +219,51 @@ def product_all(request, ):
 
 def brand_by_id(request, pk):
     brand_f = Product.objects.filter(brand_id=pk)
-    brand_all = Brand.objects.all()
+    
     context = {
         'brand_f': brand_f,
-        'brand_all': brand_all,
+        
     }
     return render(request, "shop_product/brand.html", context)
+
+
+"""
+<< Delete product >>
+"""
+def delete_product(request, id):
+    products = Product.objects.get(pk=id)
+    products.delete()
+    messages.info(request, "Product ochirildi.")
+    return redirect('shop_product:pro')
+
+"""
+<< Search product >>
+"""
+def search(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        products = Product.objects.filter(name__icontains=searched)
+        context = {
+            'searched': searched,
+            'products': products,
+        }
+        
+        return render(request, "shop_product/search.html", context)
+    else:
+        return render(request, "shop_product/search.html")
+
+"""
+<< Search product in category_page >>
+"""
+def search_cat(request):
+    if request.method == "POST":
+        searched_cat = request.POST['searched_cat']
+        all_product = Product.objects.filter(name__icontains=searched_cat)
+        context = {
+            'searched_cat': searched_cat,
+            'all_product': all_product,
+        }
+        
+        return render(request, "shop_product/all_category.html", context)
+    else:
+        return render(request, "shop_product/all_category.html")

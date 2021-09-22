@@ -1,3 +1,7 @@
+from shop_product.models import Product
+from shop_product.views import product_all
+from django.db.models import query
+from shop_product.forms import SearchForms
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from .forms import RegisterForm, Login_User, ProfileForm, ProfileImage
@@ -88,3 +92,5 @@ def profile(request):
 
 
 
+
+            

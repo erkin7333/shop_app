@@ -1,5 +1,8 @@
 from django import forms
 from .models import ShippingAddress, Product
+from django.db.models import query
+from .models import ShippingAddress, Product, Order
+
 
 # class ChekoutForm(forms.ModelForm):
 #     class Meta:
@@ -19,3 +22,9 @@ class AddProduct(forms.ModelForm):
         widgets = {
             'description': forms.Textarea(attrs={'rows': 2, 'cols': 21}),
         }
+
+
+class SearchForms(forms.Form):
+    query = forms.CharField(max_length=100)
+    catid = forms.IntegerField()
+

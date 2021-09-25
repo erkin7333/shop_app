@@ -1,51 +1,18 @@
 {% extends 'layout.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
 {% load humanize %}
+
+
+
+
 {% block content %}
-    <section class="blog-banner-area" id="category">
-        <div class="container h-100">
-            <div class="blog-banner">
-                <div class="text-center">
-                    <h1>Maxsulotlarni brendlar <br> asosida xarid qiling</h1>
-                    <nav aria-label="breadcrumb" class="banner-breadcrumb">
-                        <ol class="breadcrumb">
-                            <h5 class="breadcrumb-item"><a href="{% url 'shop_product:pro' %}"><strong>Home</strong></a>
-                            </h5>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="section-margin--small mb-5">
-        <div class="container">
+
+    <div  style="max-height: 400px; overflow: auto; min-width: 50%;">
+        {% if searched %}
+            <h3 class="login__title title text-center">You searched for {{ searched }}</h3>
             <div class="row">
-                <div class="col-xl-3 col-lg-4 col-md-5">
-                    <div class="sidebar-filter">
-                        <div class="top-filter-head text-center">Brand</div>
-                        <div class="common-filter">
-                            {% for de in brand_all %}
-                                <ul>
-                                    <a href="{% url 'shop_product:brand' de.id %}"
-                                       class="button button-paypal text-center mt-3">{{ de.name }}</a>
-                                </ul>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-9 col-lg-8 col-md-7 mt-5">
-                    <div class="filter-bar d-flex flex-wrap justify-content-center">
-                        <div>
-                            <div class="input-group filter-bar-search ">
-                                <input type="text" placeholder="Search">
-                                <div class="input-group-append">
-                                    <button type="button"><i class="ti-search"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <section class="lattest-product-area pb-40 category-list">
-                        <div class="row">
-                            {% for product in brand_f %}
+                {% for product in products %}
                     <div class="col-md-6 col-lg-4 col-xl-3">
                         <div class="card text-center card-product border">
                             <div class="card-product__img ">
@@ -88,11 +55,11 @@
                         </div>
                     </div>
                 {% endfor %}
-                        </div>
-                    </section>
-                    <!-- End Best Seller -->
-                </div>
             </div>
-        </div>
-    </section>
+        {% else %}
+            <h3 class="login__title title text-center">Hey! You forgot to searched for.. </h3>
+        {% endif %}
+
+    </div>
+
 {% endblock %}

@@ -25,6 +25,7 @@ def pre_save_receiver(sender, instance, *args, **kwargs):
 class Brand(models.Model):
     name = models.CharField(max_length=250, null=True, blank=True)
     slug = models.SlugField(unique=True)
+    category = models.ForeignKey('Category', models.CASCADE)
     def __str__(self):
         return self.name
 

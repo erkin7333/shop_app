@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 
 {% load category_filter %}
+{% load humanize %}
 
 
 
@@ -30,7 +31,7 @@
                         <div class="main-categories">
                             {% for re in brand_all %}
                                 <ul>
-                                    <a href="{% url "shop_product:brand" re.id %}"
+                                    <a href="{% url 'shop_product:brand' re.id %}"
                                        class="button button-paypal text-center mt-3">{{ re.name }}</a>
                                 </ul>
                             {% endfor %}
@@ -50,31 +51,49 @@
                     </div>
                     <section class="lattest-product-area pb-40 category-list">
                         <div class="row">
-                            {% for rm in category_f %}
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="card text-center card-product">
-                                        <div class="card-product__img">
-                                            <img class="card-img" src="{{ rm.image.url }}" alt="">
-                                            <ul class="card-product__imgOverlay">
-                                                <li>
-                                                    <button><i class="ti-search"></i></button>
-                                                </li>
-                                                <li>
-                                                    <button><i class="ti-shopping-cart"></i></button>
-                                                </li>
-                                                <li>
-                                                    <button><i class="ti-heart"></i></button>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="card-body">
-                                            <p>{{ rm.category }}</p>
-                                            <h4 class="card-product__title"><a href="#">Quartz Belt Watch</a></h4>
-                                            <p class="card-product__price">$ {{ rm.price }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
+                            {% for product in category_f %}
+                    <div class="col-md-6 col-lg-4 col-xl-3">
+                        <div class="card text-center card-product border">
+                            <div class="card-product__img ">
+                                <img class="card-img" src="{{ product.image.url }}" alt="">
+                            </div>
+                            <div class="card-body">
+                                <h3>{{ product.name }}</h3>
+                                <p>{{ product.brand }}</p>
+                                <h6 class="card-product__title mt-2"><a
+                                        href="{% url 'shop_product:pro_detail' product.slug %}">Ko'rish
+                                </a></h6>
+                                <i class="
+                                        {% if product.rating < 0.5 %}far fa-star {% elif product.rating == 0.5 %} fa fa-star-half-alt {% else %} fa fa-star {% endif %} "
+                                   aria-hidden="true" style="color: yellow"></i>
+                                <i class="
+                                         {% if product.rating < 1.5 %}far fa-star {% elif product.rating == 1.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
+                                   aria-hidden="true" style="color: yellow"></i>
+                                <i class="
+                                        {% if product.rating < 2.5 %}far fa-star{% elif product.rating == 2.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
+                                   aria-hidden="true" style="color: yellow"></i>
+                                <i class="
+                                         {% if product.rating < 3.5 %}far fa-star{% elif product.rating == 3.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
+                                   aria-hidden="true" style="color: yellow"></i>
+                                <p class="card-product__price text-danger"><strong>$</strong> {{ product.selling_price|intcomma }}</p>
+                                
+                            <tr>
+                                <th><i class="bi bi-eye-fill"></i> {{ product.view_count }}</th>
+                            </tr>
+                            <br/>
+                            {% if user.is_authenticated and product.user_id == user.id or user.is_staff %}
+                                    <a class="btn bg-primary text-white"
+                                       href="{% url 'shop_product:product_edit' product.id %}"><small><i>Edit</i></small></a>
+                                {% endif %}
+                                
+                                {% if user.is_authenticated and product.user_id == user.id or user.is_staff %}
+                                    <a class="btn bg-danger text-white ml-1"
+                                       href="{% url 'shop_product:delete_product' product.id %}"><small><i>Delete</i></small></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
                         </div>
                     </section>
                 </div>

@@ -2,9 +2,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, View, UpdateView, DetailView, TemplateView
 from django.views.generic.edit import CreateView
+
+from django.views.generic import ListView, View, UpdateView, DetailView, CreateView, TemplateView, DeleteView
+
 from .models import Product, Cart, Order, Brand, Category, CartProduct, ShippingAddress
 from django.db.models import F, Sum, Avg
-from .forms import AddProduct, ShippingAddressForm
+from .forms import AddProduct, SearchForms, ShippingAddressForm
 from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
@@ -17,9 +20,9 @@ class ProductView(ListView):
     template_name = "shop_product/product.html"
     context_object_name = 'products'
     paginate_by = 4
+    
 
-
-class ProductDetailView(TemplateView):
+class ProductDetailView(LoginRequiredMixin,TemplateView):
     template_name = "shop_product/produc_page.html"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -31,7 +34,7 @@ class ProductDetailView(TemplateView):
         return context
 
 
-class AddToCartView(View):
+class AddToCartView(LoginRequiredMixin,View):
     def get(self, request, pro_id):
         product_id = pro_id
         # mahsulotni olish
@@ -61,6 +64,8 @@ class AddToCartView(View):
                                                      rate=product_obj.selling_price, subtotal=product_obj.selling_price, quantity=1)
             cart_obj.total += product_obj.selling_price
             cart_obj.save()
+
+        messages.info(request, "This item was added to your cart.")
         return redirect('shop_product:mycart')
 
 class MyCartView(TemplateView):
@@ -83,6 +88,7 @@ class AllDeleteView(View):
             cart.cartproduct_set.all().delete()
             cart.total = 0
             cart.save()
+            messages.info(request, "This items was cleaned from your cart.")
         return redirect('shop_product:mycart')
 
 class ChekoutView(CreateView):
@@ -137,12 +143,14 @@ class ManagerCartView(View):
             cp_obj.subtotal += cp_obj.rate
             cp_obj.save()
             cart_obj.total += cp_obj.rate
+            messages.info(request, "This item quantity was updated.")
             cart_obj.save()
         elif action == "dcr":
             cp_obj.quantity -= 1
             cp_obj.subtotal -= cp_obj.rate
             cp_obj.save()
             cart_obj.total -= cp_obj.rate
+            messages.info(request, "This item was removed from your cart.")
             cart_obj.save()
             if cp_obj.quantity == 0:
                 cp_obj.delete()
@@ -150,6 +158,7 @@ class ManagerCartView(View):
             cart_obj.total -= cp_obj.subtotal
             cart_obj.save()
             cp_obj.delete()
+            messages.info(request, "This item was deleted from your cart.")
         return redirect('shop_product:mycart')
 
 
@@ -173,6 +182,7 @@ def add_product(request):
         'form': form
     }
     return render(request, "shop_product/add_product.html", context)
+
 
 class ProductEdit(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Product
@@ -208,9 +218,11 @@ def useraddproduct(request):
 
 
 
+
 def category_by_id(request, pk):
+    print(pk)
     category_f = Product.objects.filter(category_id=pk)
-    brand_all = Brand.objects.all()
+    brand_all = Brand.objects.filter(category=pk)
     context = {
         'category_f': category_f,
         'brand_all': brand_all,
@@ -218,7 +230,7 @@ def category_by_id(request, pk):
     return render(request, 'shop_product/categorya.html', context)
 
 
-def product_all(request, ):
+def product_all(request):
     cat = Category.objects.all()
     all_product = Product.objects.all()
     context = {
@@ -230,11 +242,52 @@ def product_all(request, ):
 
 def brand_by_id(request, pk):
     brand_f = Product.objects.filter(brand_id=pk)
-    brand_all = Brand.objects.all()
+    
     context = {
         'brand_f': brand_f,
-        'brand_all': brand_all,
+        
     }
     return render(request, "shop_product/brand.html", context)
 
 
+
+"""
+<< Delete product >>
+"""
+def delete_product(request, id):
+    products = Product.objects.get(pk=id)
+    products.delete()
+    messages.info(request, "Product ochirildi.")
+    return redirect('shop_product:pro')
+
+"""
+<< Search product >>
+"""
+def search(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        products = Product.objects.filter(name__icontains=searched)
+        context = {
+            'searched': searched,
+            'products': products,
+        }
+        
+        return render(request, "shop_product/search.html", context)
+    else:
+        return render(request, "shop_product/search.html")
+
+"""
+<< Search product in category_page >>
+"""
+def search_cat(request):
+    if request.method == "POST":
+        searched_cat = request.POST['searched_cat']
+        all_product = Product.objects.filter(name__icontains=searched_cat)
+        context = {
+            'searched_cat': searched_cat,
+            'all_product': all_product,
+        }
+        
+        return render(request, "shop_product/all_category.html", context)
+    else:
+        return render(request, "shop_product/all_category.html")

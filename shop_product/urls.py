@@ -27,7 +27,15 @@ urlpatterns = [
     path('product_edit/<int:pk>/', ProductEdit.as_view(), name='product_edit'),
 
     path('category/<int:pk>/', category_by_id, name='category_by_id'),
+
     path('brand/<int:pk>/', brand_by_id, name='brand'),
-    path('product_all/', product_all, name='all_product')
+
+    path('product_all/', product_all, name='all_product'),
+
+    path('delete/<int:id>/', delete_product, name='delete_product'),
+
+    path('search/', search, name='search'),
+
+    path('search_cat/', search_cat, name='search_cat')
 
 ]

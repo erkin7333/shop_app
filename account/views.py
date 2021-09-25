@@ -54,33 +54,53 @@ def user_logout(request):
     logout(request)
     return redirect('shop_product:pro')
 
+def user_objects(request):
+    user_profile = User.objects.get(id=request.user.id)
+    context = {
+        "user_profile": user_profile
+    }
+    return render(request, 'account/profile.html', context)
 
 def profile(request):
     prof = User.objects.get(id=request.user.id)
     form_u = ProfileForm(instance=prof)
     if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
-        if request.POST.get('password'):
-            form = PasswordChangeForm(request.user, request.POST)
-            if form.is_valid():
-                user = form.save()
-                update_session_auth_hash(request, user)  # Important!
-                messages.success(request, 'Your password was successfully updated!')
-
-            else:
-                messages.error(request, 'Please correct the error below.')
+        # # form = PasswordChangeForm(request.user, request.POST)
+        # if form.is_valid():
+        #     user = form.save()
+        #     update_session_auth_hash(request, user)  # Important!
+        #     messages.success(request, 'Your password was successfully updated!')
+        #
+        # else:
+        #     messages.error(request, form.errors)
         form_u = ProfileForm(request.POST, request.FILES, instance=prof)
         if form_u.is_valid():
             form_u.save()
             return redirect("account:profil")
-    else:
-        form = PasswordChangeForm(request.user)
+    # else:
+        # form = PasswordChangeForm(request.user)
 
     context = {
         'form_u': form_u,
-        'form': form
+        # 'form': form
     }
     return render(request, 'account/profil.html', context)
 
 
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Parolingiz muvaffaqiyatli yangilandi!')
+            return redirect('account:profil')
+        else:
+            messages.error(request, 'Iltimos, pastdagi xatoni tuzating.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'account/change_password.html', {
+        'form': form
+    })
 

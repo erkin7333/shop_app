@@ -22,6 +22,8 @@ urlpatterns = [
 
     path('add_pro/', add_product, name='add_pro'),
 
+    path('useraddpro/', useraddproduct, name='useraddproduct'),
+
     path('product_edit/<int:pk>/', ProductEdit.as_view(), name='product_edit'),
 
     path('category/<int:pk>/', category_by_id, name='category_by_id'),

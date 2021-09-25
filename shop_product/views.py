@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, View, UpdateView, DetailView, CreateView, TemplateView
+from django.views.generic import ListView, View, UpdateView, DetailView, TemplateView
+from django.views.generic.edit import CreateView
 from .models import Product, Cart, Order, Brand, Category, CartProduct, ShippingAddress
 from django.db.models import F, Sum, Avg
 from .forms import AddProduct, ShippingAddressForm
@@ -183,6 +184,28 @@ class ProductEdit(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         obj = self.get_object()
         return self.request.user.is_superuser or obj.user == self.request.user
 
+def useraddproduct(request):
+    if request.method == 'POST':
+        form = AddProduct(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    else:
+        form = AddProduct()
+        user = request.user
+        user_all_pro = Product.objects.filter(user=user)
+        context = {
+            'user_all_pro': user_all_pro,
+            'form': form
+        }
+    return render(request, "shop_product/add_product.html", context)
+
+# def userallproduct(request):
+#
+#     return render(request, 'shop_product/add_product.html', context)
+
+
+
 
 
 def category_by_id(request, pk):
@@ -213,3 +236,5 @@ def brand_by_id(request, pk):
         'brand_all': brand_all,
     }
     return render(request, "shop_product/brand.html", context)
+
+

@@ -230,6 +230,7 @@ def brand_by_id(request, pk):
 """
 << Delete product >>
 """
+@login_required
 def delete_product(request, id):
     products = Product.objects.get(pk=id)
     products.delete()

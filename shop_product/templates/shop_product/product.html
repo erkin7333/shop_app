@@ -26,34 +26,20 @@
     <main class="site-main">
     <section class="section-margin mt-0">
         <div class="owl-carousel owl-theme hero-carousel">
+            {% for product in products %}
+            {% if product.rating > 3.5 %} 
             <div class="hero-carousel__slide">
-                <img src="{% static 'image/hero-slide2.png' %}" alt="" class="img-fluid">
+                <img src="{{ product.image.url }}" alt="" class="img-fluid">
                 <a href="#" class="hero-carousel__slideOverlay">
-                    <h3>Wireless Headphone</h3>
+                    <h3>{{ product.name }}</h3>
                     <p>Accessories Item</p>
                 </a>
             </div>
-            <div class="hero-carousel__slide">
-                <img src="{% static 'image/hero-slide1.png' %}" alt="" class="img-fluid">
-                <a href="#" class="hero-carousel__slideOverlay">
-                    <h3>Shoes</h3>
-                    <p>Accessories Item</p>
-                </a>
-            </div>
-            <div class="hero-carousel__slide">
-                <img src="{% static 'image/hero-slide2.png' %}" alt="" class="img-fluid">
-                <a href="#" class="hero-carousel__slideOverlay">
-                    <h3>Wireless Headphone</h3>
-                    <p>Accessories Item</p>
-                </a>
-            </div>
-            <div class="hero-carousel__slide">
-                <img src="{% static 'image/hero-slide1.png' %}" alt="" class="img-fluid">
-                <a href="#" class="hero-carousel__slideOverlay">
-                    <h3>Shoes</h3>
-                    <p>Accessories Item</p>
-                </a>
-            </div>
+            {% endif %}
+            {% endfor %}
+            
+            
+
         </div>
     </section>
     <section class="section-margin calc-60px">

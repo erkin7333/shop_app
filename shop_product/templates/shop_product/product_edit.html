@@ -6,15 +6,26 @@
 
 
 {% block content %}
+    <section class="order_details section-margin--small">
+        <div class="container">
+            <p class="text-center billing-alert"></p>
+            <div class="row mb-5">
+                <div class="order_details_table">
+                    <h2>Product Edit</h2>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <form action="{% url 'shop_product:product_edit' object.id %}" method="POST"
+                                  enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{ form | crispy }}
+                                <img src="{{ object.image.url }}" alt="rasm" class="img-responsive">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
 
-    <div class="login" style="max-height: 400px; overflow: auto; min-width: 50%;">
-        <h3 class="login__title title text-center">Edit</h3>
-        <form action="{% url 'shop_product:product_edit' object.id %}" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form | crispy }}
-            <img src="{{ object.image.url }}" alt="rasm" class="img-responsive">
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-    </div>
-
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

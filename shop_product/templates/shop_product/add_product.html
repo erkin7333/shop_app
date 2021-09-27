@@ -1,19 +1,89 @@
 {% extends 'layout.html' %}
 {% load  crispy_forms_tags %}
+{% load humanize %}
 
 
 {% block content %}
-<div class="container mt-4 mb-5">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card" style="width: 30rem;">
-                <form action="" method="post">
-                    {% csrf_token %}
-                    {{ form | crispy }}
-                    <button type="submit" class="btn btn-block btn-outline-primary">AddProduct</button>
-                </form>
+
+    <section class="blog-banner-area" id="category">
+        <div class="container h-100">
+            <div class="blog-banner">
+                <div class="text-center">
+                    <h1>{{ request.user }} maxsulot qo'shing</h1>
+                    <nav aria-label="breadcrumb" class="banner-breadcrumb">
+                        <ol class="breadcrumb">
+                            <h5 class="breadcrumb-item"><a href="{% url 'shop_product:pro' %}"><strong>Home</strong></a>
+                            </h5>
+                        </ol>
+                    </nav>
+                </div>
             </div>
         </div>
-    </div>
-</div>
+    </section>
+
+    <section class="section-margin--small mb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-3 col-lg-4 col-md-5">
+                    <div class="sidebar-categories">
+                        <div class="head text-center">Add Product</div>
+                        <div class="main-categories">
+                            <form action="" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{ form | crispy }}
+                                <button type="submit" class="btn btn-block btn-outline-primary">Save</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-9 col-lg-8 col-md-7">
+                    <div class="filter-bar d-flex flex-wrap justify-content-center">
+                        <div>
+                            <div class="input-group filter-bar-search ">
+                                <input type="text" placeholder="Search">
+                                <div class="input-group-append">
+                                    <button type="button"><i class="ti-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <section class="lattest-product-area pb-40 category-list">
+                        <div class="row">
+                            {% for rm in user_all_pro %}
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="card text-center card-product border">
+                                        <div class="card-product__img">
+                                            <img class="card-img" src="{{ rm.image.url }}" style="width: 250px; height: 180px;" alt="">
+                                        </div>
+                                        <div class="card-body">
+                                            <p>{{ rm.category }}</p>
+                                        <p>{{ rm.brand }}</p>
+                                        <p>{{ rm.name }}</p>
+                                        <p class="card-product__price text-danger"><strong>$</strong> {{ rm.selling_price|intcomma }}</p>
+                                            <h4 class="card-product__title"><a href="#">Ko'rish</a></h4>
+                                            <i class="
+                                        {% if rm.rating < 0.5 %}far fa-star {% elif rm.rating == 0.5 %} fa fa-star-half-alt {% else %} fa fa-star {% endif %} "
+                                               aria-hidden="true" style="color: yellow"></i>
+                                            <i class="
+                                         {% if rm.rating < 1.5 %}far fa-star {% elif rm.rating == 1.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
+                                               aria-hidden="true" style="color: yellow"></i>
+                                            <i class="
+                                        {% if rm.rating < 2.5 %}far fa-star{% elif rm.rating == 2.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
+                                               aria-hidden="true" style="color: yellow"></i>
+                                            <i class="
+                                         {% if rm.rating < 3.5 %}far fa-star{% elif rm.rating == 3.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
+                                               aria-hidden="true" style="color: yellow"></i>
+                                        </div>
+                                    <footer class="bg-dark">
+                                        <i class="bi bi-eye-fill text-light">{{ rm.view_count }}</i>
+                                    </footer>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

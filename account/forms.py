@@ -12,9 +12,9 @@ class RegisterForm(forms.Form):
     phone = forms.CharField(max_length=14, required=True,
                             validators=[PhoneValidator()])
     password = forms.CharField(max_length=30, widget=forms.PasswordInput, required=True,
-                               validators=[MinLengthValidator(3), MaxLengthValidator(6)])
+                               validators=[MinLengthValidator(3), MaxLengthValidator(10)])
     confirm = forms.CharField(max_length=30, widget=forms.PasswordInput, required=True,
-                              validators=[MinLengthValidator(3), MaxLengthValidator(6)])
+                              validators=[MinLengthValidator(3), MaxLengthValidator(10)])
 
 
 
@@ -61,11 +61,11 @@ class SetPasswordForm(forms.Form):
     password
     """
     error_messages = {
-        'password_mismatch': ("The two password fields didn't match."),
+        'parolga mos kelmaslik': ("Ikkita parol maydoni mos kelmadi."),
     }
-    new_password1 = forms.CharField(label=("New password"),
+    new_password1 = forms.CharField(label=("Yangi Parol"),
                                     widget=forms.PasswordInput)
-    new_password2 = forms.CharField(label=("New password confirmation"),
+    new_password2 = forms.CharField(label=("Yangi parolni tasdiqlash"),
                                     widget=forms.PasswordInput)
 
     def __init__(self, user, *args, **kwargs):
@@ -95,8 +95,8 @@ class PasswordChangeForm(SetPasswordForm):
     password.
     """
     error_messages = dict(SetPasswordForm.error_messages, **{
-        'password_incorrect': ("Your old password was entered incorrectly. "
-                                "Please enter it again."),
+        "parol_ noto'g'ri": ("Sizning eski parolingiz noto'g'ri kiritilgan. "
+                                "Iltimos, uni qayta kiriting."),
     })
-    old_password = forms.CharField(label=("Old password"),
+    old_password = forms.CharField(label=("Eski parol"),
                                    widget=forms.PasswordInput)

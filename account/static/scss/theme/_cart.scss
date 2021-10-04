@@ -17,7 +17,7 @@
 					font-weight: 500;
 					font-family: $title-font;
 					color: $title-color;
-					border-bottom: 0px !important; 
+					border-bottom: 0px !important;
 				}
 			}
 		}
@@ -34,7 +34,7 @@
 							img{
 								// border: 1px solid #eeeeee;
 								border-radius: 3px;
-								
+
 								@media(max-width: 600px){
 									max-width: 100px;
 									height: 80px;
@@ -97,7 +97,7 @@
             background: #f9f9ff;
             border-color: #EEEEEE;
 			color: $title-color;
-			
+
 			@media(min-width: 1000px){
 				padding: 7px 45px;
 			}
@@ -107,7 +107,7 @@
 							width: 60px;
 						}
 						.cupon_text{
-							margin-left: -429px; 
+							margin-left: -429px;
 							@media(min-width: 991px){
 								margin-left: -465px;
 							}
@@ -254,10 +254,10 @@
 							border: 1px solid #eeeeee;
               width: 100%;
               font-size: 14px;
-              color: #999999;              
+              color: #999999;
 							padding: 0px 15px;
               margin-bottom: 20px;
-              
+
               &::placeholder{
                 color: #999999;
               }

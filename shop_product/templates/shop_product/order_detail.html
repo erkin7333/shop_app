@@ -1,0 +1,70 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <h3>Order Detail</h3>
+                <hr>
+                <p><span class="font-weight-bold">Buyurtma identifikatori:</span> #Buyurtma_{{ ord_obj.id }}</p>
+                <p><span class="font-weight-bold">Buyurtma holati:</span> {{ ord_obj.order_status }}</p>
+                <p><span class="font-weight-bold">Buyurtma vaqti:</span> {{ ord_obj.createdAt }} ({{ ord_obj.createdAt | timesince }}) oldin</p>
+                <p><span class="font-weight-bold">Buyurtmachi:</span> {{ ord_obj.first_name }}, {{ ord_obj.last_name }}</p>
+                <p><span class="font-weight-bold">Telefon raqami:</span> {{ ord_obj.phone }}</p>
+                <p><span class="font-weight-bold">Elektron manzili:</span> {{ ord_obj.email }}</p>
+                <p><span class="font-weight-bold">Yuk haqida ma'lumot:</span>
+
+                </p>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>
+                            Maxsulot
+                        </th>
+                        <th>Rasmi</th>
+                        <th>
+                            Narxi
+                        </th>
+                        <th>
+                            Soni
+                        </th>
+                        <th>
+                            Umumiy narxi
+                        </th>
+                </thead>
+                <tbody>
+                    {% for object in ord_obj.cart.cartproduct_set.all %}
+                        <td>
+                            {% for product in products %}
+                                {% if product.id == object.product_id %}
+                                    {{ product }}
+                                {% endif %}
+                            {% endfor %}
+
+
+                        </td>
+                        <td>
+                        {% for product in products %}
+                                {% if product.id == object.product_id %}
+                                    <img src="{{ product.image.url }}" alt="">
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {{ object.rate }}
+                        </td>
+                        <td>
+                            {{ object.quantity }}
+                        </td>
+                        <td>
+                            {{ object.subtotal }}
+                        </td>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

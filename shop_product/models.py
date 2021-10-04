@@ -9,6 +9,7 @@ import string, random
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils.text import slugify
+from django.core.validators import MaxLengthValidator, MinLengthValidator
 
 
 class Category(models.Model):
@@ -81,15 +82,6 @@ class Review(models.Model):
         return str(self.rating)
 
 
-class OrderItem(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
-    name = models.CharField(max_length=200, blank=True, null=True)
-    quantity = models.IntegerField(default=1)
-    image = models.CharField(max_length=255, blank=True, null=True)
-    ordered = models.BooleanField(default=False)
-
-
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     total = models.PositiveIntegerField(default=0)
@@ -106,8 +98,18 @@ class CartProduct(models.Model):
     def __str__(self):
         return "Cart" + str(self.cart_id) + "CartProduct" + str(self.id)
 
-class ShippingAddress(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+
+ORDER_STATUS = (
+    ("Buyurtma qabul qilindi", "Buyurtma qabul qilindi"),
+    ("Buyurtmani qayta ishlash", "Buyurtmani qayta ishlash"),
+    ("Yo'lda", "Yo'lda"),
+    ("Buyurtma bajarildi", "Buyurtma bajarildi"),
+    ("Buyurtma bekor qilindi", "Buyurtma bekor qilindi")
+)
+
+class Order(models.Model):
+    cart = models.OneToOneField(Cart, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     first_name = models.CharField(max_length=250, null=True, blank=True)
     last_name = models.CharField(max_length=250, null=True, blank=True)
     city = models.CharField(max_length=200, blank=True, null=True, verbose_name="Shahar / Viloyat")
@@ -116,22 +118,14 @@ class ShippingAddress(models.Model):
     house_number = models.IntegerField(max_length=14, blank=True, null=True, verbose_name="Uy nomeri")
     phone = models.CharField(max_length=14, verbose_name="Telefon Nomer")
     email = models.EmailField(null=True, blank=True, verbose_name="Elektron Pochta")
-    def __str__(self):
-        return self.city
-
-
-ORDER_STATUS = (
-    ("Order Received", "Buyurtma qabul qilindi"),
-    ("Order Processing", "Buyurtmani qayta ishlash"),
-    ("On the way", "Yo'lda"),
-    ("Order Completed", "Buyurtma bajarildi"),
-    ("Order Canceled", "Buyurtma bekor qilindi")
-)
-
-class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    dicount = models.PositiveIntegerField()
+    discount = models.PositiveIntegerField()
+    subtotal = models.PositiveIntegerField()
     total = models.PositiveIntegerField()
-    order_status = models.CharField(max_length=250, default='On the way', choices=ORDER_STATUS)
+    order_status = models.CharField(max_length=250, default=1, choices=ORDER_STATUS)
     createdAt = models.DateTimeField(auto_now_add=True)
 
+class Payme(models.Model):
+    carta_numbr = models.IntegerField(max_length=16, verbose_name='Karta nomeri')
+    carta_data = models.IntegerField(max_length=5, verbose_name='Karta mudati')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    cart = models.OneToOneField(Cart, on_delete=models.CASCADE, null=True, blank=True)

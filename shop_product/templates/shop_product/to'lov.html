@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-3">
+                <form action="" method="post">
+                    <div class="card text-center" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Payme</h5>
+                            {% csrf_token %}
+                            {{ form }}
+                            <button type="submit" class="btn btn-primary btn-block mt-4">To'lash</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

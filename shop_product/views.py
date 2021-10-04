@@ -1,17 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, View, UpdateView, DetailView, TemplateView
 from django.views.generic.edit import CreateView
-
 from django.views.generic import ListView, View, UpdateView, DetailView, CreateView, TemplateView, DeleteView
-
-from .models import Product, Cart, Order, Brand, Category, CartProduct, ShippingAddress
-from django.db.models import F, Sum, Avg
-from .forms import AddProduct, SearchForms, ShippingAddressForm
+from .models import Product, Cart, Order, Brand, Category, CartProduct
+from .forms import AddProduct, SearchForms, OrderForm, PaymeForm
 from django.contrib import messages
 from django.db.models import Q
-from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse_lazy
 
 
@@ -32,6 +27,23 @@ class ProductDetailView(LoginRequiredMixin,TemplateView):
         prod.save()
         context['product'] = prod
         return context
+
+class UserOrderDetaile(DetailView):
+    template_name = 'shop_product/order_detail.html'
+    model = Order
+    context_object_name = "ord_obj"
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            pass
+        else:
+            return redirect('account:login')
+        return super().dispatch(request, *args, **kwargs)
+    def get_context_data(self, **kwargs):
+        context = super(UserOrderDetaile, self).get_context_data(**kwargs)
+        context['products'] = Product.objects.all()
+        return context
+
+
 
 
 class AddToCartView(LoginRequiredMixin,View):
@@ -58,7 +70,7 @@ class AddToCartView(LoginRequiredMixin,View):
                 cart_obj.total += product_obj.selling_price
                 cart_obj.save()
         else:
-            cart_obj = Cart.objects.create(total=0)
+            cart_obj = Cart.objects.create(user=self.request.user, total=0)
             self.request.session['cart_id'] = cart_obj.id
             cartproduct = CartProduct.objects.create(cart=cart_obj, product=product_obj,
                                                      rate=product_obj.selling_price, subtotal=product_obj.selling_price, quantity=1)
@@ -93,8 +105,9 @@ class AllDeleteView(View):
 
 class ChekoutView(CreateView):
     template_name = 'shop_product/chekout.html'
-    form_class = ShippingAddressForm
+    form_class = OrderForm
     success_url = reverse_lazy("shop_product:myorder")
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         cart_id = self.request.session.get("cart_id", None)
@@ -120,14 +133,42 @@ class ChekoutView(CreateView):
             return redirect('shop_product:myorder')
         return super().form_valid(form)
 
+class PaymeViews(CreateView):
+    template_name = "shop_product/to'lov.html"
+    form_class = PaymeForm
+    success_url = reverse_lazy("shop_product:pro")
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart_id = self.request.session.get("cart_id", None)
+        if cart_id:
+            cart_obj = Cart.objects.get("cart_id")
+        else:
+            cart_obj = None
+        context['payme'] = cart_obj
+        return context
+    def form_valid(self, form):
+        cart_id = self.request.session.get("cart_id")
+        if cart_id:
+            cart_obj = Cart.objects.get(id=cart_id)
+            user = self.request.user
+            form.instance.user = user
+            form.instance.cart = cart_obj
+            form.instance.total= cart_obj.total
+            del self.request.session['cart_id']
+        else:
+            return redirect('shop_product:pro')
+        return super().form_valid(form)
 
 
-# class OrderView(TemplateView):
-#     template_name = 'shop_product/order.html'
+
 
 def orderview(request):
-    carttt = Cart.objects.all()
-    return render(request, 'shop_product/order.html', {"carttt": carttt})
+    users = request.user
+    orders = Order.objects.filter(user=users)
+    context = {
+        "orders": orders
+    }
+    return render(request, 'shop_product/order.html', context)
 
 
 

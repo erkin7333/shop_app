@@ -14,6 +14,7 @@ User = get_user_model()
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
+from django.utils.translation import gettext_lazy as _
 
 
 class UserRegister(View):
@@ -64,8 +65,14 @@ def user_logout(request):
 
 def user_objects(request):
     user_profile = User.objects.get(id=request.user.id)
+    if request.method == 'POST':
+        form_p = ProfileForm(request.POST, request.FILES)
+        if form_p.is_valid():
+            form_p.save()
+            return redirect("account:profil")
     context = {
-        "user_profile": user_profile
+        "user_profile": user_profile,
+        "form_p": form_p
     }
     return render(request, 'account/profile.html', context)
 
@@ -73,25 +80,17 @@ def profile(request):
     prof = User.objects.get(id=request.user.id)
     form_u = ProfileForm(instance=prof)
     if request.method == 'POST':
-        # # form = PasswordChangeForm(request.user, request.POST)
-        # if form.is_valid():
-        #     user = form.save()
-        #     update_session_auth_hash(request, user)  # Important!
-        #     messages.success(request, 'Your password was successfully updated!')
-        #
-        # else:
-        #     messages.error(request, form.errors)
         form_u = ProfileForm(request.POST, request.FILES, instance=prof)
         if form_u.is_valid():
             form_u.save()
             return redirect("account:profil")
-    # else:
-        # form = PasswordChangeForm(request.user)
 
     context = {
         'form_u': form_u,
-        # 'form': form
+    
     }
+    messages.success(request, 'Your password was successfully updated!')
+        
     return render(request, 'account/profil.html', context)
 
 

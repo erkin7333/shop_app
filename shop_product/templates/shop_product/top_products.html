@@ -4,63 +4,13 @@
 
 {% block content %}
 
-    <section class="hero-banner">
-        <div class="container">
-            <div class="row no-gutters align-items-center pt-60px">
-                <div class="col-5 d-none d-sm-block">
-                    <div class="hero-banner__img">
-                        <img src="{% static 'image/hero-banner.png' %}" style="width: 353px; height: 400px;"
-                             class="img-fluid" alt="Erkin">
-                    </div>
-                </div>
-                <div class="col-sm-7 col-lg-6 offset-lg-1 pl-4 pl-md-5 pl-lg-0">
-                    <div class="hero-banner__content">
-                        <h4>Do'kon qiziqarli</h4>
-                        <h1>Premium mahsulotimizni ko'rib chiqing</h1>
-                        <a class="button button-hero" href="{% url 'shop_product:top_products' %}">Hozir ko'rib chiqish</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
     <main class="site-main">
-    <section class="section-margin mt-0">
-        <div class="owl-carousel owl-theme hero-carousel">
-            {% for product in products %}
-            {% if product.rating > 3.5 %} 
-            <div class="hero-carousel__slide">
-                <img src="{{ product.image.url }}" alt="" class="img-fluid">
-                <a href="{% url 'shop_product:pro_detail' product.slug %}" class="hero-carousel__slideOverlay">
-                    <h3>{{ product.name }}</h3>
-                    <i class="
-                                        {% if product.rating < 0.5 %}far fa-star {% elif product.rating == 0.5 %} fa fa-star-half-alt {% else %} fa fa-star {% endif %} "
-                                   aria-hidden="true" style="color: yellow"></i>
-                                <i class="
-                                         {% if product.rating < 1.5 %}far fa-star {% elif product.rating == 1.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
-                                   aria-hidden="true" style="color: yellow"></i>
-                                <i class="
-                                        {% if product.rating < 2.5 %}far fa-star{% elif product.rating == 2.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
-                                   aria-hidden="true" style="color: yellow"></i>
-                                <i class="
-                                         {% if product.rating < 3.5 %}far fa-star{% elif product.rating == 3.5 %}fa fa-star-half-alt {% else %} fa fa-star{% endif %} "
-                                   aria-hidden="true" style="color: yellow"></i>
-                </a>
-            </div>
-            {% endif %}
-            {% endfor %}
-            
-            
-
-        </div>
-    </section>
     <section class="section-margin calc-60px">
         <div class="container">
-            <div class="section-intro pb-60px">
-                <p>Bozorda mashhur mahsulot</p>
-                <h2>Ommabop <span class="section-intro__style">Mahsulot</span></h2>
-            </div>
+           
             <div class="row">
                 {% for product in products %}
+                {% if product.rating > 3.5 %} 
                     <div class="col-md-6 col-lg-4 col-xl-3">
                         <div class="card text-center card-product border">
                             <div class="card-product__img ">
@@ -102,6 +52,7 @@
                             </div>
                         </div>
                     </div>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>

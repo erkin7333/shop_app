@@ -21,6 +21,11 @@ class ProductView(ListView):
     context_object_name = 'products'
     paginate_by = 4
     
+class TopProducts(ListView):
+    model = Product
+    template_name = "shop_product/top_products.html"
+    context_object_name = 'products'
+    paginate_by = 4
 
 class ProductDetailView(LoginRequiredMixin,TemplateView):
     template_name = "shop_product/produc_page.html"

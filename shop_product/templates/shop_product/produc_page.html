@@ -24,12 +24,16 @@
                         <h3><span>Category</span> : {{ product.category.name }}</h3>
                         <h2><span>Nomi:</span>: {{ product.name }}</h2>
                         <h2><i class="bi bi-eye-fill"></i> {{ product.view_count }}</h2>
+
                         <h2><strong>Sotuvda</strong>: {% if product.countInstok <= 0 %}Yoq{% else %}
                             Bor{% endif %} {{ product.countInstok }}</h2>
+
+
                         <h2>Previous Price:  <strike>{{ product.marked_price }}</strike>  . Sum</h2>
                         <h2>Next Price:  {{ product.selling_price }} . Sum</h2>
                         <p>{{ object.description }}</p>
-                        <a href="{% url "shop_product:add_to_cart" product.id%}" class="btn btn-primary btn-md my-0 p">
+                        
+                        <a href="{% url 'shop_product:add_to_cart' product.id%}" class="btn btn-primary btn-md my-0 p {% if product.countInstok <= 0 %} disabled {% else %} active {% endif %}">
                          Add to cart
                          <i class="fas fa-shopping-cart ml-1"></i>
                        </a>

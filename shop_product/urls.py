@@ -36,6 +36,8 @@ urlpatterns = [
 
     path('search/', search, name='search'),
 
-    path('search_cat/', search_cat, name='search_cat')
+    path('search_cat/', search_cat, name='search_cat'),
+
+    path('top_products/', TopProducts.as_view(), name='top_products')
 
 ]

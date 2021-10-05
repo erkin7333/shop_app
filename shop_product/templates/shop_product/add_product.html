@@ -53,7 +53,9 @@
                                 <div class="col-md-6 col-lg-4">
                                     <div class="card text-center card-product border">
                                         <div class="card-product__img">
+                                           
                                             <img class="card-img" src="{{ rm.image.url }}" style="width: 250px; height: 180px;" alt="">
+                                       
                                         </div>
                                         <div class="card-body">
                                             <p>{{ rm.category }}</p>
@@ -77,6 +79,15 @@
                                     <footer class="bg-dark">
                                         <i class="bi bi-eye-fill text-light">{{ rm.view_count }}</i>
                                     </footer>
+                                    {% if user.is_authenticated and product.user_id == user.id or user.is_staff %}
+                                    <a class="btn bg-primary text-white"
+                                       href="{% url 'shop_product:product_edit' rm.id %}"><small><i>Edit</i></small></a>
+                                    {% endif %}
+                                
+                                    {% if user.is_authenticated and product.user_id == user.id or user.is_staff %}
+                                    <a class="btn bg-danger text-white ml-1"
+                                       href="{% url 'shop_product:delete_product' rm.id %}"><small><i>Delete</i></small></a>
+                                    {% endif %}
                                     </div>
                                 </div>
                             {% endfor %}

@@ -1,6 +1,7 @@
 <!doctype html>
 {% load static %}
 {% load cart_tags %}
+{% load i18n %}
 
 
 <html lang="uz">
@@ -23,6 +24,7 @@
     <link rel="stylesheet" href="{% static 'account/nouislider/nouislider.min.css' %}">
     <link rel="stylesheet" href="{% static 'main/styles.css' %}">
     <link rel="stylesheet" href="{% static 'main/style.css' %}"/>
+    
 
 </head>
 <body>
@@ -40,21 +42,24 @@
                 </button>
                 <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                     <ul class="nav navbar-nav menu_nav ml-auto mr-auto">
-                        <li class="nav-item active"><a class="nav-link" href="{% url 'shop_product:pro' %}">Home</a>
+                        <li class="nav-item active"><a class="nav-link" href="{% url 'shop_product:pro' %}">{% translate 'Home' %}</a>
                         </li>
                         <li class="nav-item active">
-                            <a href="{% url 'shop_product:all_product' %}" class="nav-link dropdown-toggle">Shop
-                                Category</a>
+                            <a href="{% url 'shop_product:all_product' %}" class="nav-link dropdown-toggle">{% trans 'Shop Category' %}</a>
                         </li>
                     </ul>
 
                     <ul class="nav-shop">
+                        <select class="selectpicker" data-width="fit">
+                            <option data-content='<span class="flag-icon flag-icon-us"></span> English'>English</option>
+                          <option  data-content='<span class="flag-icon flag-icon-mx"></span> Español'>Español</option>
+                        </select>
                         {% if user.is_authenticated %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'shop_product:mycart' %}">Cart
+                                <!-- <a class="nav-link" href="{% url 'shop_product:mycart' %}">Cart
                                     <span class="badge red z-depth-1 mr-1"> {{ request.user|cart_item_count }} </span>
                                     <i class="fas fa-shopping-cart"></i>
-                                </a>
+                                </a> -->
                             </li>
                             <li class="nav-item"><a class="button button-header"
                                                     href="{% url 'account:user_profile' %}">{{ request.user }}</a>
@@ -214,6 +219,11 @@
     </div>
 </footer>
 
+<script>
+    $(function(){
+    $('.selectpicker').selectpicker();
+});
+</script>
 
 <script src="{% static 'account/jquery-3.6.0.min.js' %}"></script>
 <script src="{% static 'account/jquery/jquery-3.2.1.min.js' %}"></script>

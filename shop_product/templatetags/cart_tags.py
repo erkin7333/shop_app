@@ -8,7 +8,6 @@ def cart_item_count(user):
     if user.is_authenticated:
         qs = Cart.objects.filter(user=user)
         to = CartProduct.objects.all()
-        if qs.exists():
-            return to.cart.count()
+        
     return 0
 

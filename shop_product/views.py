@@ -1,18 +1,14 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, View, UpdateView, DetailView, TemplateView
 from django.views.generic.edit import CreateView
-
 from django.views.generic import ListView, View, UpdateView, DetailView, CreateView, TemplateView, DeleteView
-
-from .models import Product, Cart, Order, Brand, Category, CartProduct, ShippingAddress
-from django.db.models import F, Sum, Avg
-from .forms import AddProduct, SearchForms, ShippingAddressForm
+from .models import Product, Cart, Order, Brand, Category, CartProduct
+from .forms import AddProduct, SearchForms, OrderForm, PaymeForm
 from django.contrib import messages
 from django.db.models import Q
-from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 
 
 class ProductView(ListView):
@@ -20,15 +16,18 @@ class ProductView(ListView):
     template_name = "shop_product/product.html"
     context_object_name = 'products'
     paginate_by = 4
-    
+
+
 class TopProducts(ListView):
     model = Product
     template_name = "shop_product/top_products.html"
     context_object_name = 'products'
     paginate_by = 4
 
-class ProductDetailView(LoginRequiredMixin,TemplateView):
+
+class ProductDetailView(LoginRequiredMixin, TemplateView):
     template_name = "shop_product/produc_page.html"
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         url_slug = self.kwargs['slug']
@@ -39,13 +38,31 @@ class ProductDetailView(LoginRequiredMixin,TemplateView):
         return context
 
 
-class AddToCartView(LoginRequiredMixin,View):
+class UserOrderDetaile(DetailView):
+    template_name = 'shop_product/order_detail.html'
+    model = Order
+    context_object_name = "ord_obj"
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            pass
+        else:
+            return redirect('account:login')
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(UserOrderDetaile, self).get_context_data(**kwargs)
+        context['products'] = Product.objects.all()
+        return context
+
+
+class AddToCartView(LoginRequiredMixin, View):
     def get(self, request, pro_id):
         product_id = pro_id
         # mahsulotni olish
 
         product_obj = Product.objects.get(id=product_id)
-    #     # Maxsulot mavjudligini tekshirish
+        #     # Maxsulot mavjudligini tekshirish
         cart_id = self.request.session.get('cart_id', None)
         if cart_id:
             cart_obj = Cart.objects.get(id=cart_id)
@@ -57,24 +74,28 @@ class AddToCartView(LoginRequiredMixin,View):
                 cart_obj.total += product_obj.selling_price
                 cart_obj.save()
             else:
-                cartproduct = CartProduct.objects.create(cart=cart_obj, product=product_obj, rate=product_obj.selling_price,
+                cartproduct = CartProduct.objects.create(cart=cart_obj, product=product_obj,
+                                                         rate=product_obj.selling_price,
                                                          quantity=1, subtotal=product_obj.selling_price)
 
                 cart_obj.total += product_obj.selling_price
                 cart_obj.save()
         else:
-            cart_obj = Cart.objects.create(total=0)
+            cart_obj = Cart.objects.create(user=self.request.user, total=0)
             self.request.session['cart_id'] = cart_obj.id
             cartproduct = CartProduct.objects.create(cart=cart_obj, product=product_obj,
-                                                     rate=product_obj.selling_price, subtotal=product_obj.selling_price, quantity=1)
+                                                     rate=product_obj.selling_price, subtotal=product_obj.selling_price,
+                                                     quantity=1)
             cart_obj.total += product_obj.selling_price
             cart_obj.save()
 
         messages.info(request, "This item was added to your cart.")
         return redirect('shop_product:mycart')
 
+
 class MyCartView(TemplateView):
     template_name = "shop_product/cart.html"
+
     def get_context_data(self, **kwargs):
         context = super(MyCartView, self).get_context_data(**kwargs)
         cart_id = self.request.session.get("cart_id", None)
@@ -84,6 +105,7 @@ class MyCartView(TemplateView):
             cartt = None
         context['cartt'] = cartt
         return context
+
 
 class AllDeleteView(View):
     def get(self, request, *args, **kwargs):
@@ -96,10 +118,12 @@ class AllDeleteView(View):
             messages.info(request, "This items was cleaned from your cart.")
         return redirect('shop_product:mycart')
 
+
 class ChekoutView(CreateView):
     template_name = 'shop_product/chekout.html'
-    form_class = ShippingAddressForm
+    form_class = OrderForm
     success_url = reverse_lazy("shop_product:myorder")
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         cart_id = self.request.session.get("cart_id", None)
@@ -109,6 +133,7 @@ class ChekoutView(CreateView):
             cart_obj = None
         context['cart'] = cart_obj
         return context
+
     def form_valid(self, form):
         cart_id = self.request.session.get("cart_id")
         if cart_id:
@@ -126,15 +151,42 @@ class ChekoutView(CreateView):
         return super().form_valid(form)
 
 
+class PaymeViews(CreateView):
+    template_name = "shop_product/to'lov.html"
+    form_class = PaymeForm
+    success_url = reverse_lazy("shop_product:pro")
 
-# class OrderView(TemplateView):
-#     template_name = 'shop_product/order.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart_id = self.request.session.get("cart_id", None)
+        if cart_id:
+            cart_obj = Cart.objects.get("cart_id")
+        else:
+            cart_obj = None
+        context['payme'] = cart_obj
+        return context
+
+    def form_valid(self, form):
+        cart_id = self.request.session.get("cart_id")
+        if cart_id:
+            cart_obj = Cart.objects.get(id=cart_id)
+            user = self.request.user
+            form.instance.user = user
+            form.instance.cart = cart_obj
+            form.instance.total = cart_obj.total
+            del self.request.session['cart_id']
+        else:
+            return redirect('shop_product:pro')
+        return super().form_valid(form)
+
 
 def orderview(request):
-    carttt = Cart.objects.all()
-    return render(request, 'shop_product/order.html', {"carttt": carttt})
-
-
+    users = request.user
+    orders = Order.objects.filter(user=users)
+    context = {
+        "orders": orders
+    }
+    return render(request, 'shop_product/order.html', context)
 
 
 class ManagerCartView(View):
@@ -167,8 +219,6 @@ class ManagerCartView(View):
         return redirect('shop_product:mycart')
 
 
-
-
 class ProductFilter(ListView):
     model = Product
 
@@ -199,6 +249,7 @@ class ProductEdit(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         obj = self.get_object()
         return self.request.user.is_superuser or obj.user == self.request.user
 
+
 def useraddproduct(request):
     if request.method == 'POST':
         form = AddProduct(request.POST, request.FILES)
@@ -214,14 +265,6 @@ def useraddproduct(request):
             'form': form
         }
     return render(request, "shop_product/add_product.html", context)
-
-# def userallproduct(request):
-#
-#     return render(request, 'shop_product/add_product.html', context)
-
-
-
-
 
 
 def category_by_id(request, pk):
@@ -247,24 +290,23 @@ def product_all(request):
 
 def brand_by_id(request, pk):
     brand_f = Product.objects.filter(brand_id=pk)
-    
+
     context = {
         'brand_f': brand_f,
-        
+
     }
     return render(request, "shop_product/brand.html", context)
-
 
 
 """
 << Delete product >>
 """
-@login_required
 def delete_product(request, id):
     products = Product.objects.get(pk=id)
     products.delete()
     messages.info(request, "Product ochirildi.")
     return redirect('shop_product:pro')
+
 
 """
 << Search product >>
@@ -277,14 +319,17 @@ def search(request):
             'searched': searched,
             'products': products,
         }
-        
+
         return render(request, "shop_product/search.html", context)
     else:
         return render(request, "shop_product/search.html")
 
+
 """
 << Search product in category_page >>
 """
+
+
 def search_cat(request):
     if request.method == "POST":
         searched_cat = request.POST['searched_cat']
@@ -293,7 +338,7 @@ def search_cat(request):
             'searched_cat': searched_cat,
             'all_product': all_product,
         }
-        
+
         return render(request, "shop_product/all_category.html", context)
     else:
         return render(request, "shop_product/all_category.html")

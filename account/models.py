@@ -9,7 +9,7 @@ from django.core.files import File
 
 class User(AbstractUser):
     phone = models.CharField(max_length=15, blank=True, null=True)
-    image = models.ImageField(upload_to='profile', default="default.png")
+    image = models.ImageField(upload_to='profile', default="user.png")
 
     def save(self, *args, **kwargs):
         if not self.image.closed:

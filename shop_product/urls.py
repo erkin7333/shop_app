@@ -20,6 +20,10 @@ urlpatterns = [
 
     path('order/', orderview, name='myorder'),
 
+    path("payme/", PaymeViews.as_view(), name='payme'),
+
+    path('order_detail/<int:pk>/', UserOrderDetaile.as_view(), name='order_detail'),
+
     path('add_pro/', add_product, name='add_pro'),
 
     path('useraddpro/', useraddproduct, name='useraddproduct'),

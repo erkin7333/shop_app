@@ -13,9 +13,8 @@ from django.contrib import messages
 User = get_user_model()
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
-
+from shop_product.models import Order
 
 class UserRegister(View):
     def setup(self, request, *args, **kwargs):
@@ -65,14 +64,8 @@ def user_logout(request):
 
 def user_objects(request):
     user_profile = User.objects.get(id=request.user.id)
-    if request.method == 'POST':
-        form_p = ProfileForm(request.POST, request.FILES)
-        if form_p.is_valid():
-            form_p.save()
-            return redirect("account:profil")
     context = {
-        "user_profile": user_profile,
-        "form_p": form_p
+        "user_profile": user_profile
     }
     return render(request, 'account/profile.html', context)
 
@@ -84,12 +77,11 @@ def profile(request):
         if form_u.is_valid():
             form_u.save()
             return redirect("account:profil")
-
     context = {
         'form_u': form_u,
     
     }
-    messages.success(request, 'Your password was successfully updated!')
+    
         
     return render(request, 'account/profil.html', context)
 
@@ -111,3 +103,12 @@ def change_password(request):
         'form': form
     })
 
+def order_history(request):
+    user = request.user
+    if user.is_authenticated and user.is_superuser:
+        orders = Order.objects.all()
+        context = {
+            "orders": orders
+        }
+        return render(request, 'account/order_h.html', context)
+    return render(request, 'account/order_h.html')

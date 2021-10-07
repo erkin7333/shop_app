@@ -1,0 +1,65 @@
+{% extends 'layout.html' %}
+{% load humanize %}
+
+{% block content %}
+    <section class="blog-banner-area" id="category">
+        <div class="container h-100">
+            <div class="blog-banner">
+                <div class="text-center">
+                    <h1>Buyurtmani tasdiqlash</h1>
+                    <nav aria-label="breadcrumb" class="banner-breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'shop_product:pro' %}">Home</a></li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="cart_area">
+        <div class="container">
+            <div class="cart_inner">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">User</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Product id</th>
+                            <th scope="col">Subtotal</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for ret in orders %}
+                            <tr>
+                                <td>
+                                    <h5>{{ ret.user }}</h5>
+                                </td>
+                                <td>
+                                    <h5>{{ ret.email }}</h5>
+                                </td>
+                                <td>
+                                    <h5>{{ ret.phone }}</h5>
+                                </td>
+                                <td>
+                                    <h5>{{ ret.id }}</h5>
+                                </td>
+                                <td>
+                                    <h5>{{ ret.total | intcomma }}: Sum</h5>
+                                </td>
+                                <td>
+                                    <h5></h5>
+                                </td>
+                                <td>
+                                    <h5><a href="" class="btn btn-primary">To'lov</a></h5>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

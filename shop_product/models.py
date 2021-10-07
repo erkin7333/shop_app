@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+
 User = get_user_model()
 from decimal import *
 from PIL import Image
@@ -9,31 +10,44 @@ import string, random
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils.text import slugify
+from django.core.validators import MaxLengthValidator, MinLengthValidator
+from django.core.validators import RegexValidator
 
 
 class Category(models.Model):
     name = models.CharField(max_length=250, null=True, blank=True)
     slug = models.SlugField(unique=True)
+
     def __str__(self):
         return self.name
+
+
 category_list = ['a', 'd', 'k', 'b', 'c', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'w', 'i', 'l', 'z']
+
+
 @receiver(pre_save, sender=Category)
 def pre_save_receiver(sender, instance, *args, **kwargs):
-   if not instance.slug:
-       instance.slug = slugify(instance.name + "_" + str(random.choice(category_list)))
+    if not instance.slug:
+        instance.slug = slugify(instance.name + "_" + str(random.choice(category_list)))
+
 
 class Brand(models.Model):
     name = models.CharField(max_length=250, null=True, blank=True)
     slug = models.SlugField(unique=True)
     category = models.ForeignKey('Category', models.CASCADE)
+
     def __str__(self):
         return self.name
 
+
 brand_list = ['a', 'd', 'k', 'b', 'c', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'w', 'i', 'l', 'z']
+
+
 @receiver(pre_save, sender=Brand)
 def pre_save_receiver(sender, instance, *args, **kwargs):
-   if not instance.slug:
-       instance.slug = slugify(instance.name + "_" + str(random.choice(brand_list)))
+    if not instance.slug:
+        instance.slug = slugify(instance.name + "_" + str(random.choice(brand_list)))
+
 
 class Product(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -52,8 +66,10 @@ class Product(models.Model):
     view_count = models.PositiveIntegerField(default=0)
     countInstok = models.IntegerField(default=0, blank=True, null=True)
     createDat = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return self.name
+
     def save(self, *args, **kwargs):
         if not self.image.closed:
             img = Image.open(self.image)
@@ -64,11 +80,15 @@ class Product(models.Model):
             self.image = File(tmp, 'image.png')
         return super().save(*args, **kwargs)
 
+
 str_list = ['a', 'd', 'k', 'b', 'c', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'w', 'i', 'l', 'z']
+
+
 @receiver(pre_save, sender=Product)
 def pre_save_receiver(sender, instance, *args, **kwargs):
-   if not instance.slug:
-       instance.slug = slugify(instance.name + "_" + str(random.choice(str_list)))
+    if not instance.slug:
+        instance.slug = slugify(instance.name + "_" + str(random.choice(str_list)))
+
 
 class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
@@ -81,21 +101,14 @@ class Review(models.Model):
         return str(self.rating)
 
 
-class OrderItem(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
-    name = models.CharField(max_length=200, blank=True, null=True)
-    quantity = models.IntegerField(default=1)
-    image = models.CharField(max_length=255, blank=True, null=True)
-    ordered = models.BooleanField(default=False)
-
-
 class Cart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     total = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return "Cart" + str(self.id)
+
 
 class CartProduct(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
@@ -103,11 +116,23 @@ class CartProduct(models.Model):
     rate = models.PositiveIntegerField()
     quantity = models.PositiveIntegerField()
     subtotal = models.PositiveIntegerField()
+
     def __str__(self):
         return "Cart" + str(self.cart_id) + "CartProduct" + str(self.id)
 
-class ShippingAddress(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+
+ORDER_STATUS = (
+    ("Buyurtma qabul qilindi", "Buyurtma qabul qilindi"),
+    ("Buyurtmani qayta ishlash", "Buyurtmani qayta ishlash"),
+    ("Yo'lda", "Yo'lda"),
+    ("Buyurtma bajarildi", "Buyurtma bajarildi"),
+    ("Buyurtma bekor qilindi", "Buyurtma bekor qilindi")
+)
+
+
+class Order(models.Model):
+    cart = models.OneToOneField(Cart, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     first_name = models.CharField(max_length=250, null=True, blank=True)
     last_name = models.CharField(max_length=250, null=True, blank=True)
     city = models.CharField(max_length=200, blank=True, null=True, verbose_name="Shahar / Viloyat")
@@ -116,22 +141,17 @@ class ShippingAddress(models.Model):
     house_number = models.IntegerField(max_length=14, blank=True, null=True, verbose_name="Uy nomeri")
     phone = models.CharField(max_length=14, verbose_name="Telefon Nomer")
     email = models.EmailField(null=True, blank=True, verbose_name="Elektron Pochta")
-    def __str__(self):
-        return self.city
-
-
-ORDER_STATUS = (
-    ("Order Received", "Buyurtma qabul qilindi"),
-    ("Order Processing", "Buyurtmani qayta ishlash"),
-    ("On the way", "Yo'lda"),
-    ("Order Completed", "Buyurtma bajarildi"),
-    ("Order Canceled", "Buyurtma bekor qilindi")
-)
-
-class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    dicount = models.PositiveIntegerField()
+    discount = models.PositiveIntegerField()
+    subtotal = models.PositiveIntegerField()
     total = models.PositiveIntegerField()
-    order_status = models.CharField(max_length=250, default='On the way', choices=ORDER_STATUS)
+    order_status = models.CharField(max_length=250, default=1, choices=ORDER_STATUS)
     createdAt = models.DateTimeField(auto_now_add=True)
 
+
+class Payme(models.Model):
+    carta_numbr = models.CharField(primary_key=True, max_length=16,
+                                   validators=[MinLengthValidator(16), MaxLengthValidator(17),
+                                               RegexValidator(r'^\d{1,16}$')], verbose_name='Karta nomeri')
+    carta_data = models.IntegerField(max_length=5, verbose_name='Karta mudati')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    cart = models.OneToOneField(Cart, on_delete=models.CASCADE, null=True, blank=True)

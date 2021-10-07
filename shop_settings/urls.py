@@ -28,7 +28,8 @@ urlpatterns = [
 
 urlpatterns += i18n_patterns(
     path('account/', include('account.urls')),
-    path('', include('shop_product.urls'))
+    path('', include('shop_product.urls')),
+    
 ) 
 
 if settings.DEBUG:

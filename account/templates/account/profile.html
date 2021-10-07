@@ -7,8 +7,15 @@
                 <div class="col-lg-6 offset-3">
                     <div class="login_box_img">
                         <div class="hover">
-                            <img src="{{ user_profile.image.url }}" class="shadow ml-2 mb-3" alt="..."
-                                 style="width: 250px; height: 250px; border-radius: 50%;">
+                            {% if user_profile.image %}
+
+                            <img src="{{ user_profile.image.url }}" class="shadow ml-2 mb-3" alt=""
+                            style="width: 250px; height: 250px; border-radius: 50%;">
+                            {% else %}
+                            <img src="/media/profile/user.png" alt="n" class="shadow-lg"
+                            style="width: 200px; height: 200px; border-radius: 50%;">
+                            {% endif %}
+                       
                             <h2>{{ user_profile }}</h2>
                             <h5>{{ user_profile.first_name }}
                                 <br>{{ user_profile.last_name }}<br>{{ user_profile.email }}
@@ -16,6 +23,7 @@
                             <a class="button button-account mt-4" href="{% url 'account:profil' %}">Profilni o'zgartirish</a>
                             <a class="button button-account mt-4" href="{% url 'account:changepassword' %}">Parolni uzgartirish</a>
                             <a class="button button-account mt-4" href="{% url 'shop_product:useraddproduct' %}">AddProduct</a>
+                            <a class="button button-account mt-4" href="{% url 'account:order_history' %}">Order History</a>
                         </div>
                     </div>
                 </div>

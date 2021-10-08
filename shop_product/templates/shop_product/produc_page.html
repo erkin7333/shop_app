@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-
+{% load i18n %}
 
 {% block content %}
 
@@ -21,20 +21,20 @@
                 </div>
                 <div class="col-lg-5 offset-lg-1">
                     <div class="s_product_text">
-                        <h3><span>Category</span> : {{ product.category.name }}</h3>
-                        <h2><span>Nomi:</span>: {{ product.name }}</h2>
+                        <h3><span>{% trans 'Categoriya' %}</span> : {{ product.category.name }}</h3>
+                        <h2><span>{% trans 'Nomi:' %}</span>: {{ product.name }}</h2>
                         <h2><i class="bi bi-eye-fill"></i> {{ product.view_count }}</h2>
 
-                        <h2><strong>Sotuvda</strong>: {% if product.countInstok <= 0 %}Yoq{% else %}
+                        <h2><strong>{% trans 'Sotuvda' %}</strong>: {% if product.countInstok <= 0 %}Yoq{% else %}
                             Bor{% endif %} {{ product.countInstok }}</h2>
 
 
-                        <h2>Previous Price:  <strike>{{ product.marked_price }}</strike>  . Sum</h2>
-                        <h2>Next Price:  {{ product.selling_price }} . Sum</h2>
+                        <h2>{% trans 'Oldingi narx:' %}  <strike>{{ product.marked_price }}</strike>  . Sum</h2>
+                        <h2>{% trans 'Xozirgi narx:' %}  {{ product.selling_price }} . Sum</h2>
                         <p>{{ object.description }}</p>
                         
                         <a href="{% url 'shop_product:add_to_cart' product.id%}" class="btn btn-primary btn-md my-0 p {% if product.countInstok <= 0 %} disabled {% else %} active {% endif %}">
-                         Add to cart
+                         {% trans 'Savatchaga qoshish' %}
                          <i class="fas fa-shopping-cart ml-1"></i>
                        </a>
                     </div>
@@ -47,12 +47,12 @@
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
-                       aria-selected="true">Tavsif</a>
+                       aria-selected="true">{% trans 'Tavsif' %}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
                        aria-controls="profile"
-                       aria-selected="false">Xususiyat</a>
+                       aria-selected="false">{% trans 'Xususiyat' %}</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -73,7 +73,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <h5>Klient</h5>
+                                    <h5>{% trans 'Klient' %}</h5>
                                 </td>
                                 <td>
                                     <h5>{{ request.user }}</h5>
@@ -81,7 +81,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <h5>Product name</h5>
+                                    <h5>{% trans 'Product nomi' %}</h5>
                                 </td>
                                 <td>
                                     <h5>{{ product.name }}</h5>
@@ -89,7 +89,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <h5>Categoriy</h5>
+                                    <h5>{% trans 'Categoriya' %}</h5>
                                 </td>
                                 <td>
                                     <h5>{{ product.category }}</h5>
@@ -97,7 +97,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <h5>Product brand</h5>
+                                    <h5>{% trans 'Mahsulot brandi' %}</h5>
                                 </td>
                                 <td>
                                     <h5>{{ product.brand }}</h5>
@@ -105,7 +105,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <h5>Product reyting</h5>
+                                    <h5>{% trans 'Mahsukot reytingi' %}</h5>
                                 </td>
                                 <td>
                                     <h5>{{ product.rating }}</h5>
@@ -113,7 +113,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <h5>Sotuvda nechta bor</h5>
+                                    <h5>{% trans 'Sotuvda nechta bor' %}</h5>
                                 </td>
                                 <td>
                                     <h5>{{ product.countInstok }}</h5>
@@ -121,7 +121,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <h5>Qo'shilgan vaqti</h5>
+                                    <h5>{% trans "Qo'shilgan vaqti" %}</h5>
                                 </td>
                                 <td>
                                     <h5>{{ product.createDat }}</h5>

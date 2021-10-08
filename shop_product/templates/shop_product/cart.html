@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 {% load cart_tags %}
 {% load humanize %}
+{% load i18n %}
 
 
 {% block content %}
@@ -13,12 +14,12 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th scope="col" class="text-center">Product Foto</th>
-                                <th scope="col" class="text-center">Name</th>
-                                <th scope="col" class="text-center">Price</th>
-                                <th scope="col" class="text-center">Quantity</th>
-                                <th scope="col" class="text-center">Subtotal</th>
-                                <th scope="col" class="text-center">Action</th>
+                                <th scope="col" class="text-center">{% trans 'Mahsulot fotosi' %}</th>
+                                <th scope="col" class="text-center">{% trans 'Nomi' %}</th>
+                                <th scope="col" class="text-center">{% trans 'Narxi' %}</th>
+                                <th scope="col" class="text-center">{% trans 'Soni' %}</th>
+                                <th scope="col" class="text-center">{% trans 'Jami' %}</th>
+                                <th scope="col" class="text-center">{% trans 'Xarakat' %}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -41,12 +42,12 @@
                                 </tr>
                             {% endfor %}
                             <tr>
-                                <th><a class="btn btn-primary text-light mt-2" href="{% url 'shop_product:chekout' %}">Checkout</a>
+                                <th><a class="btn btn-primary text-light mt-2" href="{% url 'shop_product:chekout' %}">{% trans 'Savatcha' %}</a>
                                 </th>
-                                <th colspan="3" class="text-right">Jami summa:</th>
+                                <th colspan="3" class="text-right">{% trans 'Jami summa:' %}</th>
                                 <th class="text-info">{{ cartt.total|intcomma }}</th>
                                 {% if cartt.cartproduct_set.all %}
-                                    <th><a class="btn btn-danger" href="{% url 'shop_product:alldelete' %}">All Delete </a></th>
+                                    <th><a class="btn btn-danger" href="{% url 'shop_product:alldelete' %}">{% trans 'Xammasini ochirish' %}</a></th>
                                 {% endif %}
                             </tr>
                             </tbody>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-07 13:33+0500\n"
+"POT-Creation-Date: 2021-10-08 12:17+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,10 +20,279 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: templates/layout.html:46
-msgid "Bow sahifa"
-msgstr ""
+#: account/templates/account/profile.html:24
+msgid "Profilni ozgartirish"
+msgstr "Сменить профиль"
 
+#: account/templates/account/profile.html:25
+msgid "Parolni uzgartirish"
+msgstr "Измени пароль"
+
+#: account/templates/account/profile.html:26
+msgid "Mahsulot qoshish"
+msgstr "Дополнение к продукту"
+
+#: account/templates/account/profile.html:27
+msgid "Buyurtma tarixi"
+msgstr "Дата заказа"
+
+#: shop_product/templates/shop_product/all_category.html:10
+msgid "Barcha maxsulotlar shuyerda"
+msgstr "Все товары здесь"
+
+#: shop_product/templates/shop_product/all_category.html:10
+msgid "categoryalardan tanlang"
+msgstr "выбрать из категорий"
+
+#: shop_product/templates/shop_product/all_category.html:26
+msgid "Maxsulot categoriyalari"
+msgstr "Покупайте по категориям"
+
+#: shop_product/templates/shop_product/cart.html:17
+msgid "Mahsulot fotosi"
+msgstr "Дополнение к продукту"
+
+#: shop_product/templates/shop_product/cart.html:18
+#: shop_product/templates/shop_product/chekout.html:18
+msgid "Nomi"
+msgstr "Названия"
+
+#: shop_product/templates/shop_product/cart.html:19
+#: shop_product/templates/shop_product/order_detail.html:31
+msgid "Narxi"
+msgstr "Цена"
+
+#: shop_product/templates/shop_product/cart.html:20
+#: shop_product/templates/shop_product/chekout.html:20
+#: shop_product/templates/shop_product/order_detail.html:34
+msgid "Soni"
+msgstr "Количество"
+
+#: shop_product/templates/shop_product/cart.html:21
+#: shop_product/templates/shop_product/chekout.html:21
+msgid "Jami"
+msgstr "Всего"
+
+#: shop_product/templates/shop_product/cart.html:22
+msgid "Xarakat"
+msgstr "Действия"
+
+#: shop_product/templates/shop_product/cart.html:45
+msgid "Savatcha"
+msgstr "Корзинка"
+
+#: shop_product/templates/shop_product/cart.html:47
+#: shop_product/templates/shop_product/chekout.html:41
+msgid "Jami summa:"
+msgstr "Итого:"
+
+#: shop_product/templates/shop_product/cart.html:50
+msgid "Xammasini ochirish"
+msgstr "Удалить все"
+
+#: shop_product/templates/shop_product/categorya.html:13
+msgid "Maxsulotlarni categoriyalar asosida xarid qiling"
+msgstr "Покупайте товары по категориям"
+
+#: shop_product/templates/shop_product/categorya.html:63
+#: shop_product/templates/shop_product/product.html:84
+msgid "Korish"
+msgstr "Осмотреть"
+
+#: shop_product/templates/shop_product/chekout.html:11
+msgid "Savatdagi narsalar"
+msgstr "Товары в корзине"
+
+#: shop_product/templates/shop_product/chekout.html:15
+msgid "Product"
+msgstr "Названия Продукта"
+
+#: shop_product/templates/shop_product/chekout.html:16
+msgid "Categorya"
+msgstr "Категория"
+
+#: shop_product/templates/shop_product/chekout.html:17
+msgid "Brand"
+msgstr "Бранд"
+
+#: shop_product/templates/shop_product/chekout.html:19
+msgid "Reyting"
+msgstr "Рейтинг"
+
+#: shop_product/templates/shop_product/chekout.html:38
+msgid "Yangilash"
+msgstr "Обновлять"
+
+#: shop_product/templates/shop_product/chekout.html:56
+msgid "Saqlash"
+msgstr "Сохранить"
+
+#: shop_product/templates/shop_product/order.html:9
+msgid "Buyurtmani tasdiqlash"
+msgstr "Подтвердите заказ"
+
+#: shop_product/templates/shop_product/order_detail.html:9
+msgid "Buyurtmalar"
+msgstr "Заказы"
+
+#: shop_product/templates/shop_product/order_detail.html:11
+msgid "Buyurtma identifikatori:"
+msgstr "Индефикатция заказа:"
+
+#: shop_product/templates/shop_product/order_detail.html:12
+msgid "Buyurtma holati:"
+msgstr "Состояния заказа:"
+
+#: shop_product/templates/shop_product/order_detail.html:13
+msgid "Buyurtma vaqti:"
+msgstr "Дата заказа"
+
+#: shop_product/templates/shop_product/order_detail.html:15
+msgid "Buyurtmachi:"
+msgstr "Заказчик"
+
+#: shop_product/templates/shop_product/order_detail.html:17
+msgid "Telefon raqami:"
+msgstr "Номер телефона"
+
+#: shop_product/templates/shop_product/order_detail.html:18
+msgid "Elektron manzili:"
+msgstr "Электрон адресс:"
+
+#: shop_product/templates/shop_product/order_detail.html:19
+msgid "Yuk haqida ma'lumot:"
+msgstr "Инфо о продукте"
+
+#: shop_product/templates/shop_product/order_detail.html:25
+msgid "Rasmi"
+msgstr "Фото"
+
+#: shop_product/templates/shop_product/order_detail.html:28
+msgid "Maxsulot"
+msgstr "Продукт"
+
+#: shop_product/templates/shop_product/order_detail.html:37
+msgid "Umumiy narxi"
+msgstr "Обшая цена"
+
+#: shop_product/templates/shop_product/order_detail.html:40
+msgid "To'lov"
+msgstr "Оплата"
+
+#: shop_product/templates/shop_product/produc_page.html:24
+#: shop_product/templates/shop_product/produc_page.html:92
 #: templates/layout.html:49
 msgid "Categoriya"
 msgstr "Категория"
+
+#: shop_product/templates/shop_product/produc_page.html:25
+msgid "Nomi:"
+msgstr "Названия:"
+
+#: shop_product/templates/shop_product/produc_page.html:28
+msgid "Sotuvda"
+msgstr "В продаже"
+
+#: shop_product/templates/shop_product/produc_page.html:32
+msgid "Oldingi narx:"
+msgstr "Предыдущая цена:"
+
+#: shop_product/templates/shop_product/produc_page.html:33
+msgid "Xozirgi narx:"
+msgstr "Текущая цена:"
+
+#: shop_product/templates/shop_product/produc_page.html:37
+msgid "Savatchaga qoshish"
+msgstr "Добавить в корзину"
+
+#: shop_product/templates/shop_product/produc_page.html:50
+msgid "Tavsif"
+msgstr "Описание"
+
+#: shop_product/templates/shop_product/produc_page.html:55
+msgid "Xususiyat"
+msgstr "Характерная черта"
+
+#: shop_product/templates/shop_product/produc_page.html:76
+msgid "Klient"
+msgstr "Клиент"
+
+#: shop_product/templates/shop_product/produc_page.html:84
+msgid "Product nomi"
+msgstr "Названия Продукта"
+
+#: shop_product/templates/shop_product/produc_page.html:100
+msgid "Mahsulot brandi"
+msgstr "Продукт brand"
+
+#: shop_product/templates/shop_product/produc_page.html:108
+msgid "Mahsukot reytingi"
+msgstr "Рейтинг продукции"
+
+#: shop_product/templates/shop_product/produc_page.html:116
+msgid "Sotuvda nechta bor"
+msgstr "Сколько в продаже"
+
+#: shop_product/templates/shop_product/produc_page.html:124
+msgid "Qo'shilgan vaqti"
+msgstr "Добавленное время"
+
+#: shop_product/templates/shop_product/product.html:19
+msgid "Dokon qiziqarli"
+msgstr "Топ Магазин"
+
+#: shop_product/templates/shop_product/product.html:20
+msgid "Premium mahsulotimizni ko'rib chiqing"
+msgstr "Ознакомьтесь с нашим Premium продуктом"
+
+#: shop_product/templates/shop_product/product.html:21
+msgid "Hozir korib chiqish"
+msgstr "Смотреть продукты"
+
+#: shop_product/templates/shop_product/product.html:33
+msgid "Bozorda mashhur mahsulot"
+msgstr "Популярный продукт на рынке"
+
+#: shop_product/templates/shop_product/product.html:34
+msgid "Ommabop"
+msgstr "Популярный"
+
+#: shop_product/templates/shop_product/product.html:34
+msgid "Mahsulot"
+msgstr "Продукт"
+
+#: shop_product/templates/shop_product/product.html:67
+msgid "Bizning mahsulotimiz"
+msgstr "Наш продукт"
+
+#: shop_product/templates/shop_product/search.html:13
+msgid "Siz uchbu narsa boyicha qidirdingiz"
+msgstr "Вы искали эти вещи"
+
+#: templates/layout.html:46
+msgid "Bow sahifa"
+msgstr "Главная страница"
+
+#: templates/layout.html:143
+msgid "Bizning missiyamiz"
+msgstr "Наша цель"
+
+#: templates/layout.html:154
+msgid "Havolalar"
+msgstr "Отделы"
+
+#: templates/layout.html:167
+msgid "Galereya"
+msgstr "Галерея"
+
+#: templates/layout.html:180
+msgid "Contaktlar"
+msgstr "Контакты"
+
+#: templates/layout.html:184
+msgid "Bow offis"
+msgstr "Главный офис"
+
+#: templates/layout.html:200
+msgid "Telefon nomer"
+msgstr "Номер телефона"

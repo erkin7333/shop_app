@@ -34,7 +34,7 @@
                         {% for ret in orders %}
                             <tr>
                                 <td>
-                                    <h5>{{ ret.user }}</h5>
+                                    <h5><a href="{% url 'shop_product:order_detail' ret.pk %}">{{ ret.user }}</a></h5>
                                 </td>
                                 <td>
                                     <h5>{{ ret.email }}</h5>
@@ -50,9 +50,6 @@
                                 </td>
                                 <td>
                                     <h5></h5>
-                                </td>
-                                <td>
-                                    <h5><a href="" class="btn btn-primary">To'lov</a></h5>
                                 </td>
                             </tr>
                         {% endfor %}

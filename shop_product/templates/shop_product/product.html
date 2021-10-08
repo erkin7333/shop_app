@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 {% load static %}
 {% load humanize %}
+{% load i18n %}
 
 {% block content %}
 
@@ -15,9 +16,9 @@
                 </div>
                 <div class="col-sm-7 col-lg-6 offset-lg-1 pl-4 pl-md-5 pl-lg-0">
                     <div class="hero-banner__content">
-                        <h4>Do'kon qiziqarli</h4>
-                        <h1>Premium mahsulotimizni ko'rib chiqing</h1>
-                        <a class="button button-hero" href="{% url 'shop_product:top_products' %}">Hozir ko'rib chiqish</a>
+                        <h4>{% trans 'Dokon qiziqarli' %}</h4>
+                        <h1>{% trans "Premium mahsulotimizni ko'rib chiqing" %}</h1>
+                        <a class="button button-hero" href="{% url 'shop_product:top_products' %}">{% trans "Hozir korib chiqish" %}</a>
                     </div>
                 </div>
             </div>
@@ -29,8 +30,8 @@
     <section class="section-margin calc-60px">
         <div class="container">
             <div class="section-intro pb-60px">
-                <p>Bozorda mashhur mahsulot</p>
-                <h2>Ommabop <span class="section-intro__style">Mahsulot</span></h2>
+                <p>{% trans 'Bozorda mashhur mahsulot' %}</p>
+                <h2>{% trans 'Ommabop' %} <span class="section-intro__style">{% trans 'Mahsulot' %}</span></h2>
 
         <section class="section-margin">
             <div class="owl-carousel owl-theme hero-carousel">
@@ -63,7 +64,7 @@
         <section class="section-margin calc-60px">
             <div class="container">
                 <div class="section-intro pb-60px">
-                    <p>Bozorda mashhur mahsulot</p>
+                    <p>{% trans 'Bizning mahsulotimiz' %}</p>
                     <h2>Ommabop <span class="section-intro__style">Mahsulot</span></h2>
                 </div>
                 <div class="row">
@@ -80,7 +81,7 @@
                                     <p>{{ product.brand }}</p>
                                     <p><i class="bi bi-eye-fill"></i> {{ product.view_count }}</p>
                                     <h6 class="card-product__title mt-2"><a
-                                            href="{% url 'shop_product:pro_detail' product.slug %}">Ko'rish
+                                            href="{% url 'shop_product:pro_detail' product.slug %}">{% trans 'Korish' %}
                                     </a></h6>
                                     <i class="
                                         {% if product.rating < 0.5 %}far fa-star {% elif product.rating == 0.5 %} fa fa-star-half-alt {% else %} fa fa-star {% endif %} "

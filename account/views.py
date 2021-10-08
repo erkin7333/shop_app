@@ -105,8 +105,8 @@ def change_password(request):
 
 def order_history(request):
     user = request.user
-    if user.is_authenticated and user.is_superuser:
-        orders = Order.objects.all()
+    if user.is_authenticated:
+        orders = Order.objects.filter(user=user)
         context = {
             "orders": orders
         }

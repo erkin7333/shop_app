@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.utils import translation
 
 User = get_user_model()
 from decimal import *
@@ -12,6 +13,8 @@ from django.dispatch import receiver
 from django.utils.text import slugify
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.core.validators import RegexValidator
+from django.conf import settings
+from django.utils.translation import get_language
 
 
 class Category(models.Model):
@@ -50,8 +53,9 @@ def pre_save_receiver(sender, instance, *args, **kwargs):
 
 
 class Product(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    name = models.CharField(max_length=200, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, db_index=True)
+    name_uz = models.CharField(max_length=200, null=True, blank=True)
+    name_ru = models.CharField(max_length=200, null=True, blank=True)
     slug = models.SlugField(unique=True)
     image = models.ImageField(upload_to='shop_product/')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
@@ -79,6 +83,11 @@ class Product(models.Model):
             img.save(tmp, 'PNG')
             self.image = File(tmp, 'image.png')
         return super().save(*args, **kwargs)
+
+    @property
+    def name(self):
+        column = 'name_{}'.format(get_language())
+        return getattr(self, column)
 
 
 str_list = ['a', 'd', 'k', 'b', 'c', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'w', 'i', 'l', 'z']
@@ -108,6 +117,9 @@ class Cart(models.Model):
 
     def __str__(self):
         return "Cart" + str(self.id)
+
+    def get_amount(self):
+        return self.total * 100
 
 
 class CartProduct(models.Model):

@@ -89,7 +89,7 @@ class AddToCartView(LoginRequiredMixin, View):
             cart_obj.total += product_obj.selling_price
             cart_obj.save()
 
-        messages.info(request, "This item was added to your cart.")
+        messages.info(request, "Bu mahsulot savatga qo'shildi.")
         return redirect('shop_product:mycart')
 
 
@@ -115,7 +115,7 @@ class AllDeleteView(View):
             cart.cartproduct_set.all().delete()
             cart.total = 0
             cart.save()
-            messages.info(request, "This items was cleaned from your cart.")
+            messages.info(request, "Bu narsalar savatchangizdan tozalandi.")
         return redirect('shop_product:mycart')
 
 
@@ -200,14 +200,14 @@ class ManagerCartView(View):
             cp_obj.subtotal += cp_obj.rate
             cp_obj.save()
             cart_obj.total += cp_obj.rate
-            messages.info(request, "This item quantity was updated.")
+            messages.info(request, "Bu mahsulot miqdori yangilandi.")
             cart_obj.save()
         elif action == "dcr":
             cp_obj.quantity -= 1
             cp_obj.subtotal -= cp_obj.rate
             cp_obj.save()
             cart_obj.total -= cp_obj.rate
-            messages.info(request, "This item was removed from your cart.")
+            messages.info(request, "Bu mahsulot savatdan olib tashlandi.")
             cart_obj.save()
             if cp_obj.quantity == 0:
                 cp_obj.delete()
@@ -215,7 +215,7 @@ class ManagerCartView(View):
             cart_obj.total -= cp_obj.subtotal
             cart_obj.save()
             cp_obj.delete()
-            messages.info(request, "This item was deleted from your cart.")
+            messages.info(request, "Bu element savatchadan o‘chirib tashlandi.")
         return redirect('shop_product:mycart')
 
 
@@ -314,7 +314,7 @@ def delete_product(request, id):
 def search(request):
     if request.method == "POST":
         searched = request.POST['searched']
-        products = Product.objects.filter(name__icontains=searched)
+        products = Product.objects.filter(name_uz__icontains=searched)
         context = {
             'searched': searched,
             'products': products,

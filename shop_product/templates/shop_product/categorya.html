@@ -10,11 +10,10 @@
         <div class="container h-100">
             <div class="blog-banner">
                 <div class="text-center">
-                    <h1>Maxsulotlarni categoriyalar asosida xarid qiling</h1>
+                    <h1>{% trans 'Maxsulotlarni categoriyalar asosida xarid qiling' %}</h1>
                     <nav aria-label="breadcrumb" class="banner-breadcrumb">
                         <ol class="breadcrumb">
-                            <h5 class="breadcrumb-item"><a href="{% url 'shop_product:pro' %}"><strong>Home</strong></a>
-                            </h5>
+
                         </ol>
                     </nav>
                 </div>
@@ -61,7 +60,7 @@
                                 <h3>{{ product.name }}</h3>
                                 <p>{{ product.brand }}</p>
                                 <h6 class="card-product__title mt-2"><a
-                                        href="{% url 'shop_product:pro_detail' product.slug %}">Ko'rish
+                                        href="{% url 'shop_product:pro_detail' product.slug %}">{% trans 'Korish' %}
                                 </a></h6>
                                 <i class="
                                         {% if product.rating < 0.5 %}far fa-star {% elif product.rating == 0.5 %} fa fa-star-half-alt {% else %} fa fa-star {% endif %} "

@@ -2,7 +2,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load humanize %}
-
+{% load i18n %}
 
 
 
@@ -10,7 +10,7 @@
 
     <div  style="max-height: 400px; overflow: auto; min-width: 50%;">
         {% if searched %}
-            <h3 class="login__title title text-center">You searched for {{ searched }}</h3>
+            <h3 class="login__title title text-center">{% trans 'Siz uchbu narsa boyicha qidirdingiz' %}<br>{{ searched }}</h3>
             <div class="row">
                 {% for product in products %}
                     <div class="col-md-6 col-lg-4 col-xl-3">

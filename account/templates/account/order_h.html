@@ -1,12 +1,13 @@
 {% extends 'layout.html' %}
 {% load humanize %}
+{% load i18n %}
 
 {% block content %}
     <section class="blog-banner-area" id="category">
         <div class="container h-100">
             <div class="blog-banner">
                 <div class="text-center">
-                    <h1>Buyurtmani tasdiqlash</h1>
+                    <h1>{% trans 'Buyurtmani tasdiqlash' %}</h1>
                     <nav aria-label="breadcrumb" class="banner-breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{% url 'shop_product:pro' %}">Home</a></li>

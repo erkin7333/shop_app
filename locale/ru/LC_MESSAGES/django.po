@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-08 12:17+0500\n"
+"POT-Creation-Date: 2021-10-11 11:20+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,11 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: account/templates/account/order_h.html:10
+#: shop_product/templates/shop_product/order.html:9
+msgid "Buyurtmani tasdiqlash"
+msgstr "Подтвердите заказ"
 
 #: account/templates/account/profile.html:24
 msgid "Profilni ozgartirish"
@@ -36,6 +41,10 @@ msgstr "Дополнение к продукту"
 msgid "Buyurtma tarixi"
 msgstr "Дата заказа"
 
+#: shop_product/templates/shop_product/add_product.html:13
+msgid "maxsulot qo'shing"
+msgstr "Дополнение к продукту"
+
 #: shop_product/templates/shop_product/all_category.html:10
 msgid "Barcha maxsulotlar shuyerda"
 msgstr "Все товары здесь"
@@ -47,6 +56,14 @@ msgstr "выбрать из категорий"
 #: shop_product/templates/shop_product/all_category.html:26
 msgid "Maxsulot categoriyalari"
 msgstr "Покупайте по категориям"
+
+#: shop_product/templates/shop_product/brand.html:10
+msgid "Maxsulotlarni brendlar"
+msgstr "Продукт brand"
+
+#: shop_product/templates/shop_product/brand.html:10
+msgid "asosida xarid qiling"
+msgstr "купить на основе"
 
 #: shop_product/templates/shop_product/cart.html:17
 msgid "Mahsulot fotosi"
@@ -126,10 +143,6 @@ msgstr "Обновлять"
 #: shop_product/templates/shop_product/chekout.html:56
 msgid "Saqlash"
 msgstr "Сохранить"
-
-#: shop_product/templates/shop_product/order.html:9
-msgid "Buyurtmani tasdiqlash"
-msgstr "Подтвердите заказ"
 
 #: shop_product/templates/shop_product/order_detail.html:9
 msgid "Buyurtmalar"
